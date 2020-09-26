@@ -1,0 +1,19 @@
+#notifications:hover {
+    background-color: white;
+}
+
+#refresh:hover {
+    background-color: white;
+}
+
+#logout:hover {
+    background-color: white;
+}
+
+#login:hover {
+    background-color: white;
+}
+
+#login path {
+    fill: '#979797';
+}

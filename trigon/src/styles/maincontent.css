@@ -1,0 +1,25 @@
+#balance:after {
+    position: absolute;
+    content: "TRGN";
+    top: 0;
+    font-size: 11px;
+    color: #606166;
+}
+
+#usd_balance:after {
+    position: absolute;
+    content: "USD";
+    top: -5px;
+    right: -25px;
+    font-size: 11px;
+    color: #606166;
+}
+
+#eth_balance:after {
+    position: absolute;
+    content: "ETH";
+    top: -5px;
+    right: -25px;
+    font-size: 11px;
+    color: #606166;
+}

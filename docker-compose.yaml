@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+    trigon:
+      build: ./trigon/
+      container_name: trigon
+      network_mode: bridge
+      restart: unless-stopped
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./trigon:/data/app
