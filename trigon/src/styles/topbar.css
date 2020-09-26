@@ -17,3 +17,21 @@
 #login path {
     fill: '#979797';
 }
+
+#install_button:hover {
+    background: white;
+    color: #252529; 
+    /* border: 2px solid #252529; */
+}
+
+#login_button:hover {
+    background: white;
+    color: #252529; 
+    /* border: 2px solid #252529; */
+}
+
+@media(min-width: 768px) {
+    #login_form {
+        right: 0;
+    }
+}

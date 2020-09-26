@@ -11,6 +11,8 @@ class TopBar extends Component {
 
         this.state = {
             loggedIn: false,
+            metamask_installed: false,
+            show_login_modal: false,
             address: ''
         }
     }
@@ -20,11 +22,17 @@ class TopBar extends Component {
             this.setState({
                 address: this.ethereum.request({ method: 'eth_requestAccounts' }),
              });
+        } else {
+            window.location.href = "https://metamask.io/"
         }
     }
 
     componentDidMount() {
         if(this.ethereum) {
+            this.setState({
+                metamask_installed: true
+            })
+
             if(this.ethereum.selectedAddress !== null) {
                 this.setState({
                     address: this.ethereum.selectedAddress,
@@ -43,6 +51,12 @@ class TopBar extends Component {
         }
     }
 
+    switchModal = () => {
+        this.setState({
+            show_login_modal: !this.state.show_login_modal
+        })
+    }
+
     render () {
         let { loggedIn } = this.state;
         return (
@@ -50,9 +64,7 @@ class TopBar extends Component {
                 {
                     loggedIn && 
                     <div onClick={() => {window.location.pathname = "/support"}} id="notifications" className="mr-1 border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
-                        <svg style={{marginTop: "0.1rem"}} className="h-full ml-1 px-1" width="32" height="32" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M7 0.5C3.136 0.5 0 3.636 0 7.5C0 11.364 3.136 14.5 7 14.5C10.864 14.5 14 11.364 14 7.5C14 3.636 10.864 0.5 7 0.5ZM7.7 11H6.3V9.6H7.7V11ZM7.7 8.2H6.3V4H7.7V8.2Z" fill="#979797"/>
-                        </svg>
+                        {this.ethereum.selectedAddress !== null ? `${this.ethereum.selectedAddress.slice(0, 5)}...${this.ethereum.selectedAddress.slice(-3)}` : ""}
                     </div>
                 }
                 
@@ -83,11 +95,30 @@ class TopBar extends Component {
 
                 {
                     !loggedIn && 
-                    <div onClick={this.loginToMetamask} id="login" className="px-3 py-3 my-auto border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
-                        <img className="w-4 h-4" src={MetamaskLogo} alt="Metamask"/>
+                    <div className="relative">
+                        <div onClick={this.switchModal} id="login" className="px-3 py-3 my-auto border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
+                            <img className="w-4 h-4" src={MetamaskLogo} alt="Metamask"/>
+                        </div>
+                        {
+                            this.state.show_login_modal &&
+                            <div id="login_form" className="absolute right-auto w-56 h-16 border-2 border-trigon_gray-200 rounded-md p-2 bg-trigon_gray-300">
+                                <div className="flex flex-row justify-center mt-2">
+                                    <div onClick={this.loginToMetamask} id={this.state.loggedIn ? '' : "login_button"}
+                                         style={{
+                                             userSelect: this.state.loggedIn ? '' : 'none',
+                                             cursor: this.state.loggedIn ? '' : 'pointer'
+                                            }} 
+                                         className="text-sm my-auto py-2 px-6 bg-trigon_gray-200 rounded-lg">
+
+                                            {this.state.metamask_installed ? 'Connect to metamask' : 'Install metamask'}
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
-                }
-               
+                  
+                }   
+
             </div>
         )
     }
