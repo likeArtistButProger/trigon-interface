@@ -52,7 +52,15 @@ class ReferalsContent extends Component {
         }
     }
 
-    copyLink = () => {
+    copyLink = (e) => {
+        let element = e.target;
+
+        console.log(e);
+        console.log(element);
+
+        element.select();
+        element.setSelectionRange(0, 99999);
+
         document.execCommand('copy');
     }
 
@@ -100,7 +108,7 @@ class ReferalsContent extends Component {
                     <div className="relative mt-3 w-11/12 md:w-10/12 mt-2 mx-auto bg-trigon_gray-300 rounded-lg">
                         <div className="flex flex-row my-3 ml-2 grid grid-cols-1 gap-3">
                             <div>
-                                <span style={{userSelect: "none"}}>Referral link: <span onClick={this.copyLink} style={{userSelect: 'text'}} id="referral_link" className="text-sm md:text-md xl:text-md text-trigon_green cursor-pointer"> https://google.com/35235325235523.jpg </span></span>
+                                <span style={{userSelect: "none"}}>Referral link: <span id="link" data-clipboard-action={"#link"}  style={{userSelect: 'text'}} id="referral_link" className="text-sm md:text-md xl:text-md text-trigon_green cursor-pointer"> {this.ethereum ? `http://trigon.plus/?${this.ethereum.selectedAddress}` : "Connect with meramask to get your ref"} </span></span>
                             </div>
                         </div>
                     </div>

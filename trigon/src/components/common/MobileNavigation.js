@@ -64,7 +64,7 @@ class MobileNavigaition extends Component {
                                     <a href="/referral">Referrals</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/support">Support</a>
+                                    <a href="/support">FAQ</a>
                                 </li>
                                 <li className="mt-12">
                                     <div id="social" className="w-2/3 mx-auto my-auto pl-4 grid grid-cols-4 gap-2">
