@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import TopBar from '../common/TopBar';
 import CompletedModal from '../common/CompletedModal';
+import Overlay from '../common/Overlay';
 
 import '../../styles/buycontent.css';
 
@@ -20,6 +21,7 @@ class SendContent extends Component {
             transfer_address: '',
             amount: 0,
             show_modal: false,
+            show_overlay: false,
             success_transaction: '',
             transaction_processing: true,
             transaction_success: false
@@ -33,7 +35,8 @@ class SendContent extends Component {
 
     closeModal = () => {
         this.setState({
-            show_modal: false
+            show_modal: false,
+            show_overlay: false
         })
     }
 
@@ -112,11 +115,11 @@ class SendContent extends Component {
                 alert("Tokens not initialized yet by owner!");
                 return;
             }
-
-            this.setState({
-                show_modal: true
-            });
         
+            this.setState({
+                show_overlay: true
+            })
+
             let transfer_address = this.state.transfer_address;
 
             amount = (amount*10e17).toString();
@@ -125,14 +128,18 @@ class SendContent extends Component {
                 this.setState({
                     success_transaction: res.transactionHash,
                     transaction_success: true,
-                    transaction_processing: false
+                    transaction_processing: false,
+                    show_modal: true,
+                    show_overlay: false
                 })
 
                 this.getTrigonBalance();
             }).catch(error => {
                 this.setState({
                     transaction_success: false,
-                    transaction_processing: false
+                    transaction_processing: false,
+                    show_modal: true,
+                    show_overlay: false
                 })
             });
 
@@ -144,6 +151,9 @@ class SendContent extends Component {
     render() {
         return(
             <div className="flex flex-col w-11/12 md:w-11/12 mx-auto md:mx-0 md:ml-1">
+                {
+                    this.state.show_overlay && <Overlay />
+                }
                 {
                     this.state.show_modal && <CompletedModal closeModal={this.closeModal} processing={this.state.transaction_processing} success={this.state.transaction_success} transaction={this.state.success_transaction}/>
                 }
@@ -162,7 +172,7 @@ class SendContent extends Component {
                             <label htmlFor="buy" className="mb-2">TRGN amount</label>
                             <p>You have {this.state.trigon_balance} TRGN</p>
                         </div>
-                        <input defaultValue={this.state.amount} onChange={(e) => this.setState({amount: e.target.value})} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
+                        <input onChange={(e) => this.setState({amount: e.target.value})} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
                     </div>
                     <div className="flex flex-col pt-5 pb-3 w-11/12 mx-auto">
                         <label htmlFor="referrer" className="mb-2">Receiver address</label>

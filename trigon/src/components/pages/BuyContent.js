@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TopBar from '../common/TopBar';
 import CompletedModal from '../common/CompletedModal';
+import Overlay from '../common/Overlay';
 
 import '../../styles/buycontent.css';
 import { contract, methods, owner_address } from '../../trigon_interface/interface';
@@ -23,6 +24,7 @@ class BuyContent extends Component {
             usd_price: 0,
             showBalance: true,
             show_modal: false,
+            show_overlay: false,
             success_transaction: '',
             transaction_processing: true,
             transaction_success: false,
@@ -33,6 +35,10 @@ class BuyContent extends Component {
     clearInput = () => {
         this.amount.value = '';
         this.referrer.value = '';
+
+        this.setState({
+            showBalance: true
+        })
     }
 
     getBalance = async () => {
@@ -114,7 +120,8 @@ class BuyContent extends Component {
 
     closeModal = () => {
         this.setState({
-            show_modal: false
+            show_modal: false,
+            show_overlay: false
         })
     }
 
@@ -142,15 +149,18 @@ class BuyContent extends Component {
                     return;
                 }
 
+
                 this.setState({
-                    show_modal: true
-                });
+                    show_overlay: true
+                })
 
                 methods.buytoken(this.state.owner_address).send({from: this.ethereum.selectedAddress, value: (this.state.calculatedPrice * 10e17)}).then(res => {
                     this.setState({
                         success_transaction: res.transactionHash,
                         transaction_success: true,
-                        transaction_processing: false
+                        transaction_processing: false,
+                        show_modal: true,
+                        show_overlay: false
                     })
 
                     this.getBalance();
@@ -158,7 +168,9 @@ class BuyContent extends Component {
                 }).catch(error => {
                     this.setState({
                         transaction_success: false,
-                        transaction_processing: false
+                        transaction_processing: false,
+                        show_modal: true,
+                        show_overlay: false
                     })
                 })
 
@@ -203,7 +215,7 @@ class BuyContent extends Component {
             this.ethereum.on('accountsChanged', (accounts) => {
                 this.getTrigonBalance();
                 this.getBalance();
-            })
+            });
         }
 
         contract.events.Price().on('data', async (event) => {
@@ -225,6 +237,9 @@ class BuyContent extends Component {
         return(
             <div className="flex flex-col w-11/12 md:w-11/12 mx-auto md:mt-2 md:mt-2 md:mx-0 md:ml-1 md:mr-5">
                 {
+                    this.state.show_overlay && <Overlay />
+                }
+                {
                     this.state.show_modal && <CompletedModal closeModal={this.closeModal} processing={this.state.transaction_processing} success={this.state.transaction_success} transaction={this.state.success_transaction}/>
                 }
                 <div className="flex flex-row justify-between md:w-11/12 md:mx-auto text-left text-xl">
@@ -243,14 +258,14 @@ class BuyContent extends Component {
                             {
                                 this.state.showBalance ? 
                                     <p className="text-md">You have {this.state.trigon_balance} TRGN</p> :
-                                    <p className="text-md">ETH to pay {(this.state.calculatedPrice).toFixed(4)}</p>
+                                    <p className="text-md">ETH to pay {(this.state.calculatedPrice).toFixed(8)}</p>
                             }
                         </div>
                         <input value={this.state.tokenAmount} onChange={(e) => this.calculatePrice(e)} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
                     </div>
                     <div className="flex flex-col pt-5 pb-3 w-11/12 mx-auto">
                         <label htmlFor="referrer" className="mb-2">Referrer address</label>
-                        <input ref={node => this.referrer = node} type="text" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter Referrer address" name="referrer" id='referrer' required />
+                        <input disabled={true} ref={node => this.referrer = node} type="text" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter Referrer address" name="referrer" id='referrer' required />
                     </div>
                     <div className="flex flex-row justify-between w-11/12 pb-5 md:pb-64 mx-auto">
                         <span onClick={this.clearInput} className="py-2 px-3 border-2 border-trigon_gray-100 bg-trigon_gray-300 hover:bg-trigon_gray-100 rounded-lg cursor-pointer">Clear</span>

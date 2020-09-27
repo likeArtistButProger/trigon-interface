@@ -89,7 +89,7 @@ class CompletedModal extends Component {
     
     toEtherscan = () => {
         if(this.props.transaction) {
-            window.location.href = `https://ropsten.etherscan.io/tx/${this.props.transaction}`
+            window.open(`https://ropsten.etherscan.io/tx/${this.props.transaction}`);
             return;
         }
         this.props.closeModal();
@@ -102,7 +102,7 @@ class CompletedModal extends Component {
                 <div className="modal_content">
                     {   this.props.processing 
                         ?   <p>Transaction processing</p>
-                        :   <p style={{"color": this.props.success ? '#7AC231' : '#C11E0F'}} >{this.props.success ? 'Transaction Successfull' : 'Transaction Failed'}</p>
+                        :   <p style={{"color": this.props.success ? '#7AC231' : '#C11E0F'}} >{this.props.success ? 'Transaction Successful!' : 'Transaction Failed'}</p>
                     }
                     <div className="buttons">
                         <span onClick={this.toEtherscan} className="button">Tn Hash</span>

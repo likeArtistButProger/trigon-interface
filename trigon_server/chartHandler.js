@@ -39,10 +39,10 @@ class ChartHandler {
     startPriceTimer() {
         const getPrice = () => {
             contract.methods.price().call().then(res => {
-                this.nextPrice = res/10e18;
+                this.nextPrice = res/10e17;
                 this.nextDate = new Date();
 
-                if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) { 
+                if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
                     this.lastMonthPrice = this.nextPrice;
                     this.lastMonth = this.nextDate;
                 }

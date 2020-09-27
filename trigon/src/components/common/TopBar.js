@@ -57,18 +57,22 @@ class TopBar extends Component {
         })
     }
 
+    logout = () => {
+        console.log(this.ethereum);
+    }
+
     render () {
         let { loggedIn } = this.state;
         return (
             <div className="flex flex-row justify-end mt-3 md:mt-3 md:mr-3">
                 {
                     loggedIn && 
-                    <div onClick={() => {window.location.pathname = "/support"}} id="notifications" className="mr-1 border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
+                    <div id="notifications" className="mr-1 bg-trigon_gray-300 my-auto py-3 px-1 text-sm rounded-md">
                         {this.ethereum.selectedAddress !== null ? `${this.ethereum.selectedAddress.slice(0, 5)}...${this.ethereum.selectedAddress.slice(-3)}` : ""}
                     </div>
                 }
                 
-                {
+                {/* {
                     loggedIn &&
                     <div id="refresh" className="mr-1 border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
                         <svg className="h-full mt-2 ml-1 pl-1" xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 78 78">
@@ -82,14 +86,12 @@ class TopBar extends Component {
                             </g>
                         </svg>
                     </div>
-                }
+                } */}
 
                 {
                     loggedIn && 
-                    <div id="logout" className="px-3 border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
-                        <svg className="h-full my-auto" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fillRule="evenodd" clipRule="evenodd" d="M14 8H8V14H6V8H0V6H6V0H8V6H14V8Z" fill="#3F4048"/>
-                        </svg>
+                    <div onClick={this.logout} id="logout" className="px-3 border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
+                        <svg width="24" className="mt-2" fill="#FFF" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M11 21h8.033v-2l1-1v4h-9.033v2l-10-3v-18l10-3v2h9.033v5l-1-1v-3h-8.033v18zm-1 1.656v-21.312l-8 2.4v16.512l8 2.4zm11.086-10.656l-3.293-3.293.707-.707 4.5 4.5-4.5 4.5-.707-.707 3.293-3.293h-9.053v-1h9.053z"/></svg>
                     </div>
                 }
 
@@ -101,8 +103,8 @@ class TopBar extends Component {
                         </div>
                         {
                             this.state.show_login_modal &&
-                            <div id="login_form" className="absolute right-auto w-56 h-16 border-2 border-trigon_gray-200 rounded-md p-2 bg-trigon_gray-300">
-                                <div className="flex flex-row justify-center mt-2">
+                            <div id="login_form" className="absolute right-auto w-56 h-14 border-2 border-trigon_gray-200 rounded-md p-2 bg-trigon_gray-300">
+                                <div className="flex flex-row justify-center">
                                     <div onClick={this.loginToMetamask} id={this.state.loggedIn ? '' : "login_button"}
                                          style={{
                                              userSelect: this.state.loggedIn ? '' : 'none',
@@ -110,7 +112,7 @@ class TopBar extends Component {
                                             }} 
                                          className="text-sm my-auto py-2 px-6 bg-trigon_gray-200 rounded-lg">
 
-                                            {this.state.metamask_installed ? 'Connect to metamask' : 'Install metamask'}
+                                            {this.state.metamask_installed ? 'Connect' : 'Install metamask'}
                                     </div>
                                 </div>
                             </div>

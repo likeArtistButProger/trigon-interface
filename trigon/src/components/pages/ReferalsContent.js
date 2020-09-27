@@ -52,6 +52,10 @@ class ReferalsContent extends Component {
         }
     }
 
+    copyLink = () => {
+        document.execCommand('copy');
+    }
+
     render() {
         return(
             <div className="w-full flex flex-col">
@@ -82,13 +86,25 @@ class ReferalsContent extends Component {
                             <span className="flex flex-row mb-6 text-md">Earnings: <span className="font-bold mr-3 ml-auto">500 TRGN</span></span>
                         </div>
                     </div> */}
-                    <div className="relative mt-3 w-11/12 md:w-10/12 mt-2 mx-auto bg-trigon_gray-300 rounded-lg row-start-4">
+                    <div className="relative mt-3 p-3 w-11/12 md:w-10/12 mt-2 mx-auto bg-trigon_gray-300 rounded-lg">
+                        Invite A Friend. Earn Stable Growing Trigon Tokens (TRGN). <br />  <br />
+
+                        We want to thank our loyal Trigon users for the continuous support. <br />  <br />
+
+                        In line with this, the Trigon team is happy to announce that we are running an “Invite a Friend” campaign. Get your family, friends and colleagues to start using the Trigon token and earn some Trigon Token (TRGN) for that. <br />  <br />
+
+                        When a new user buys Trigon tokens for $50+ worth of Ethereum through your referral link, you will receive 5% TRGN tokens to your wallet balance. The more referrals you invite, the more TRGN tokens you will earn. <br />  <br />
+
+                        So start now and get more people onboarded with Trigon token.
+                    </div>
+                    <div className="relative mt-3 w-11/12 md:w-10/12 mt-2 mx-auto bg-trigon_gray-300 rounded-lg">
                         <div className="flex flex-row my-3 ml-2 grid grid-cols-1 gap-3">
                             <div>
-                                <span style={{userSelect: "none"}} className="">Referral link: <span style={{userSelect: 'text'}} className="text-sm md:text-md xl:text-md text-trigon_green"> https://google.com/35235325235523.jpg </span></span>
+                                <span style={{userSelect: "none"}}>Referral link: <span onClick={this.copyLink} style={{userSelect: 'text'}} id="referral_link" className="text-sm md:text-md xl:text-md text-trigon_green cursor-pointer"> https://google.com/35235325235523.jpg </span></span>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

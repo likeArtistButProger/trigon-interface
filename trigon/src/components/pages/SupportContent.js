@@ -56,7 +56,7 @@ class SendContent extends Component {
         return(
             <div className="flex flex-col w-11/12 md:w-11/12 mx-auto md:mx-0 md:ml-1">
                 <div className="flex flex-row justify-between md:w-11/12 md:mx-auto text-left mt-3 text-xl">
-                    <h1 className="mt-4">Support</h1>
+                    <h1 className="mt-4 mr-4">FAQ</h1>
                     {
                         window.innerWidth >= 768 ? <div className="flex justify-between w-3/12 mt-4 bg-trigon_gray-300 rounded-md pt-2 px-2 text-sm mx-auto"><span>Balance:</span>{this.state.account_eth_balance} ETH</div> : null
                     }
@@ -106,14 +106,6 @@ class SendContent extends Component {
                             <h2>What if I have other questions?</h2>
                             <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">You're welcome to join our social groups, where you can get all the answers from fellow TRGN holders and the Trigon team. All links you can find on the left under the menu.</div>
                         </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-3 justify-between text-center w-11/12 mx-auto mt-6 mb-16">
-                        <div style={{backgroundColor: "#1DA1F2"}} className="px-1 py-1 rounded-md">Twitter</div>
-                        <div style={{backgroundColor: "#FF0000"}} className="px-1 py-1 rounded-md">Youtube</div>
-                        <div style={{backgroundImage: "linear-gradient(90deg, rgba(64,93,230,1) 0%, rgba(225,48,108,1) 48%, rgba(252,175,69,1) 100%)"}} className="px-1 py-1 rounded-md">Instagram</div>
-                        <div style={{backgroundColor: "#4c75a3"}} className="px-1 py-1 rounded-md">VK</div>
-                        <div style={{backgroundColor: "#4267B2"}} className="px-1 py-1 rounded-md">Facebook</div>
-                        <div style={{backgroundColor: "#0088cc"}} className="px-1 py-1 rounded-md">Telegram</div>
                     </div>
                 </div>
             </div>

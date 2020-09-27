@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import { LineChart, XAxis, Tooltip, CartesianGrid, Line } from 'recharts';
 import TopBar from '../common/TopBar';
 import axios from 'axios';
+import moment from 'moment';
 
 import '../../styles/maincontent.css';
 import TrigonImage from '../../assets/trigon_coin.png';
 
-import { contract, events, methods } from '../../trigon_interface/interface';
+import { contract, methods } from '../../trigon_interface/interface';
 
 class MainContent extends Component {
     constructor(props) {
@@ -16,20 +17,10 @@ class MainContent extends Component {
         this.ethereum = window.ethereum;
 
         this.state = {
-            chart_data: [
-                { name: '12:12:2000', uv: 2000, pv: 1200, amt: 2400, uvError: [0, 50] },
-                { name: 'February', uv: 300, pv: 4567, amt: 2400, uvError: [90, 40] },
-                { name: 'March', uv: 280, pv: 1398, amt: 2400, uvError: 40 },
-                { name: 'April', uv: 200, pv: 9800, amt: 2400, uvError: 20 },
-                { name: 'May', uv: 278, pv: null, amt: 2400, uvError: 28 },
-                { name: 'June', uv: 189, pv: 4800, amt: 2400, uvError: [90, 20] },
-                { name: 'Jule', uv: 189, pv: 4800, amt: 2400, uvError: [28, 40] },
-                { name: 'August', uv: 189, pv: 4800, amt: 2400, uvError: 28 },
-                { name: 'September', uv: 189, pv: 4800, amt: 2400, uvError: 28 },
-                { name: 'October', uv: 189, pv: 4800, amt: 2400, uvError: [15, 60] },
-            ],
+            chartData: [],
             chart_width: window.innerWidth >= 767 ? window.innerWidth*0.87 : window.innerWidth*0.9,
             chart_margin: window.innerWidth >= 767 ? window.innerWidth/25 : 5,
+            lastMonthPrice: 0,
             account_eth_balance: 0,
             trigon_balance: 0,
             totalSupply: 0,
@@ -39,7 +30,9 @@ class MainContent extends Component {
             sellPrice: 0,
             usd_price: 0,
             buyCommission: 0,
-            sellCommission: 0
+            sellCommission: 0,
+            sellPercent: 0,
+            buyPercent: 0
         }
     }
 
@@ -74,7 +67,7 @@ class MainContent extends Component {
             if(address) {
                 await methods.balanceOf(address).call().then(res => {
                         this.setState({
-                            trigon_balance: (res/10e17).toFixed(4)
+                            trigon_balance: (res/10e17).toFixed(3)
                         })
                     }  
                 );
@@ -86,7 +79,7 @@ class MainContent extends Component {
     getTotalSupply = async () => {
         await methods.totalSupply().call().then(res => {
             this.setState({
-                totalSupply: (res/10e17).toFixed(4)
+                totalSupply: (res/10e17).toFixed(3)
             })
         })
     }
@@ -94,7 +87,7 @@ class MainContent extends Component {
     getTotalEthSupply = async () => {
         await methods.bank().call().then(res => {
             this.setState({
-                totalEthSupply: (res/10e17).toFixed(4)
+                totalEthSupply: (res/10e17).toFixed(3)
             })
         });
     }
@@ -134,6 +127,48 @@ class MainContent extends Component {
         });
     }
 
+    getChartData = async () => {
+        await axios.get('/api/chart').then(res => {
+            const chartPrices = res.data.prices;
+            console.log("Chartdata:", res.data);
+            let chartData = []
+
+            for(let i = 0; i < chartPrices.length; i++) {
+                chartData.push({
+                    name: `${moment(chartPrices[i].date).format("DD.MM.YYYY")}`,
+                    eth: chartPrices[i].price
+                });
+            }
+
+            this.setState({
+                chartData: chartData,
+                lastMonthPrice: res.data.lastMonthPrice 
+            })
+        })
+    }
+
+    updatePercents = () => {
+        let { lastMonthPrice, buyPrice, sellPrice, buyCommission, sellCommission }  = this.state;
+        
+        lastMonthPrice = parseFloat(lastMonthPrice);
+
+
+        let lastSell = (1 - sellCommission) * lastMonthPrice;
+        let lastBuy = lastMonthPrice / (1 - buyCommission);
+
+
+        let diffSell = sellPrice - lastSell;
+        let diffBuy = buyPrice - lastBuy;
+
+        let sellPercent = diffSell / lastSell;
+        let buyPercent = diffBuy / lastBuy;
+
+        this.setState({
+            sellPercent: parseInt(sellPercent),
+            buyPercent: parseInt(buyPercent)
+        });
+    }
+
     componentDidMount() {
         window.addEventListener('resize', this.updateSize);
 
@@ -142,7 +177,21 @@ class MainContent extends Component {
         this.getTotalSupply();
         this.getTotalEthSupply();
         this.getEtheriumPrice();
-        this.getBuyCommission().then(this.getSellComission().then(this.getPrice()));
+        this.getChartData();
+        this.getBuyCommission()
+        .then(async () => {
+            await this.getSellComission()
+        })
+        .then(async () => {
+            await this.getPrice()
+        })
+        .then(async () => {
+            await this.getChartData();
+        })
+        .then(async () => {
+            console.log(this.state);
+            await this.updatePercents();
+        });
 
         if(this.ethereum) {
             this.w3.setProvider(this.ethereum);
@@ -155,22 +204,31 @@ class MainContent extends Component {
 
         contract.events.Price().on('data', async (event) => {
 
-            this.getBuyCommission().then(this.getSellComission());
+            console.log(event);
+            console.log(event.returnValues);
 
-            let basePrice = parseFloat(event.returnValues.value)/10e17;
-            let totalSupply = (parseFloat(event.returnValues.totalSupply)/10e17).toFixed(4);
+            await this.getBuyCommission()
+            .then(async () => {
+                await this.getSellComission()
+            })
+            .then(async () => {
+                let basePrice = parseFloat(event.returnValues.value)/10e17;
+                let totalSupply = (parseFloat(event.returnValues.totalSupply)/10e17).toFixed(3);
+    
+                let buyPrice = basePrice/(1 - this.state.buyCommission);
+                let sellPrice = (1 - this.state.sellCommission) * basePrice;
 
-            this.setState({
-                basePrice: basePrice,
-                buyPrice: (basePrice/(1 - this.state.buyCommission)),
-                sellPrice: ((1 - this.state.sellCommission) * basePrice),
-                totalSupply: totalSupply
+                this.setState({
+                    basePrice: basePrice,
+                    buyPrice: buyPrice,
+                    sellPrice: sellPrice,
+                    totalSupply: totalSupply
+                });
+    
+                this.getTrigonBalance();
+                this.getEtheriumPrice();
+                this.getTotalEthSupply();
             });
-
-            this.getTrigonBalance();
-            this.getEtheriumPrice();
-            this.getTotalEthSupply();
-
         })
         .on('error', console.error);
 
@@ -183,7 +241,7 @@ class MainContent extends Component {
     }
 
     render () {
-        let { chart_data } = this.state
+        let { chartData } = this.state
 
         return (
             <div className="flex flex-col w-11/12 mx-auto xl:mx-0 xl:ml-1">
@@ -207,14 +265,14 @@ class MainContent extends Component {
                             <p id="balance" className="relative ml-auto mr-8 w-11/12 mx-auto text-center md:mb-0 md:mt-3 text-4xl md:text-4xl lg:text-5xl xl:text-6xl">{this.state.trigon_balance}</p>
                         </div>
                         <div className="flex flex-row pr-16 md:pl-0 md:pr-4 lg:pr-8 xl:pr-12 w-3/4 justify-between mx-auto my-auto">
-                                <p style={{whiteSpace: 'nowrap'}} id="usd_balance" className="relative text-sm md:text-md lg:text-lg">~ {(this.state.trigon_balance*this.state.basePrice*this.state.usd_price).toFixed(4)}</p>
-                                <p id="eth_balance" className="relative text-sm md:text-md lg:text-lg">~ {(this.state.trigon_balance*this.state.basePrice).toFixed(4)}</p>
+                                <p style={{whiteSpace: 'nowrap'}} id="usd_balance" className="relative text-sm md:text-md lg:text-lg">~ {(this.state.trigon_balance*this.state.sellPrice*this.state.usd_price).toFixed(3)}</p>
+                                <p id="eth_balance" className="relative text-sm md:text-md lg:text-lg">~ {(this.state.trigon_balance*this.state.sellPrice).toFixed(3)}</p>
                         </div>
                     </div>
                     <div className="flex flex-col justify-between pb-3 bg-trigon_green rounded-md">
                         <div className="flex flex-col justify-between">
                             <div className="flex flex-row justify-between my-3 md">
-                                <span style={{color: "#65A028"}} className="ml-3 my-auto font-bold">
+                                <span style={{color: "#65A028"}} className="ml-3 my-auto md:text-sm lg:text-lg font-bold">
                                     Total TRGN Supply
                                 </span>
                                 <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}} className="w-10 h-10 mr-3 rounded-md">
@@ -230,7 +288,7 @@ class MainContent extends Component {
                     <div className="flex flex-col justify-between pb-3 bg-trigon_green rounded-md">
                         <div className="flex flex-col justify-between">
                             <div className="flex flex-row justify-between my-3">
-                                <span style={{color: "#65A028"}} className="ml-3 my-auto font-bold">
+                                <span style={{color: "#65A028"}} className="ml-3 my-auto md:text-sm lg:text-lg font-bold">
                                     Total ETH Balance
                                 </span>
                                 <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}} className="w-10 h-10 mr-3 rounded-md">
@@ -247,13 +305,13 @@ class MainContent extends Component {
                     </div>
                     <div className="flex flex-col justify-between pb-3 bg-trigon_gray-300 rounded-md row-start-3 md:row-start-2 md:col-start-2">
                         <div className="flex flex-row justify-between">
-                            <span className="mt-4 my-auto ml-4 flex flex-row text-xs">{this.state.buyPrice.toFixed(10)} ETH <p className="text-trigon_green text-xs my-auto ml-2">+12%</p></span>
+                            <span className="mt-4 my-auto ml-4 flex flex-row text-xs">{this.state.buyPrice.toFixed(10)} ETH <p className="text-trigon_green text-xs my-auto ml-2">+{this.state.buyPercent}%</p></span>
                             <span onClick={() => {window.location.pathname = '/buy'}} className="text-sm mr-5 mt-3 md:mr-2 xl:mr-5 px-2 py-1 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">buy</span>
                         </div>
                     </div>
                     <div className="flex flex-col justify-between pb-3 bg-trigon_gray-300 rounded-md md:row-start-2 md:col-start-3">
                         <div className="flex flex-row justify-between">
-                            <span className="mt-4 my-auto ml-4 flex flex-row text-xs sm:text-md">{this.state.sellPrice.toFixed(10)} ETH <p className="text-trigon_green text-xs my-auto ml-2">+5%</p></span>
+                            <span className="mt-4 my-auto ml-4 flex flex-row text-xs sm:text-md">{this.state.sellPrice.toFixed(10)} ETH <p className="text-trigon_green text-xs my-auto ml-2">+{this.state.sellPercent}%</p></span>
                             <span onClick={() => {window.location.pathname = '/sell'}} className="text-sm mr-5 mt-3 px-2 py-1 md:mr-2 xl:mr-5 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">sell</span>
                         </div>
                     </div>
@@ -263,13 +321,13 @@ class MainContent extends Component {
                     <LineChart
                     width={this.state.chart_width}
                     height={400}
-                    data={chart_data}
+                    data={chartData}
                     margin={{ top: 5, right: 0, left: this.state.chart_margin, bottom: 5 }}
                     >
                     <XAxis dataKey="name" />
                     <Tooltip />
                     <CartesianGrid stroke="#f5f5f5" />
-                    <Line type="monotone" dataKey="uv" stroke="#ff7300" yAxisId={0} />
+                    <Line type="monotone" dataKey="eth" stroke="#ff7300" yAxisId={0} />
                     </LineChart>
                 </div>
             </div>

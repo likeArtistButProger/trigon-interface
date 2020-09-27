@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import TopBar from '../common/TopBar';
+import Overlay from '../common/Overlay';
 
 import '../../styles/buycontent.css';
 
@@ -20,7 +21,10 @@ class SellContent extends Component {
             basePrice: 0,
             sellCommission: 0,
             amount: 0,
+            calculatedPrice: 0,
             show_modal: false,
+            show_overlay: false,
+            showBalance: true,
             success_transaction: '',
             transaction_processing: true,
             transaction_success: false
@@ -29,6 +33,11 @@ class SellContent extends Component {
 
     clearInput = () => {
         this.amount.value = '';
+
+        this.setState({
+            calculatedPrice: 0,
+            showBalance: true
+        });
     }
 
     getBalance = async () => {
@@ -46,6 +55,14 @@ class SellContent extends Component {
                 });
             }
         }
+    }
+
+    getPrice = async () => {
+        await methods.price().call().then(res => {
+            this.setState({
+                basePrice: res/10e17
+            })
+        })
     }
 
     getTrigonBalance = async () => {
@@ -71,7 +88,8 @@ class SellContent extends Component {
     
     closeModal = () => {
         this.setState({
-            show_modal: false
+            show_modal: false,
+            show_overlay: false
         })
     }
 
@@ -84,8 +102,15 @@ class SellContent extends Component {
         let trigon_balance = parseFloat(this.state.trigon_balance);
         let amount = parseFloat(this.state.amount); 
 
+        console.log(this.state.amount);
+
         if(isNaN(amount) || amount === 0) {
             alert("Please write correct amount of tokens");
+            return;
+        }
+
+        if(amount > 999) {
+            alert("You can sell 999 tokens per time");
             return;
         }
 
@@ -101,8 +126,8 @@ class SellContent extends Component {
             }
 
             this.setState({
-                show_modal: true
-            });
+                show_overlay: true
+            })
 
             let tokensToSell = (amount*10e17).toString();
 
@@ -110,7 +135,9 @@ class SellContent extends Component {
                 this.setState({
                     success_transaction: res.transactionHash,
                     transaction_success: true,
-                    transaction_processing: false
+                    transaction_processing: false,
+                    show_modal: true,
+                    show_overlay: false
                 })
 
                 this.getBalance();
@@ -119,16 +146,42 @@ class SellContent extends Component {
             }).catch(error => {
                 this.setState({
                     transaction_success: false,
-                    transaction_processing: false
+                    transaction_processing: false,
+                    show_modal: true,
+                    show_overlay: false
                 })
             })
 
         });
     }
 
+    calculatePrice = async (e) => {
+        let basePrice = this.state.basePrice;
+        let commisssion = this.state.sellCommission;
+        let amount = parseFloat(e.target.value);
+        
+        if(isNaN(amount)) {
+            this.setState({
+                calculatedPrice: 0,
+                showBalance: true
+            })
+            return
+        }
+
+        let calculatedPrice = ((1 - commisssion) * basePrice) * amount;
+
+        this.setState({
+            calculatedPrice: calculatedPrice,
+            showBalance: calculatedPrice === 0,
+            amount: amount
+        })
+    }
+
     componentDidMount() {
         this.getBalance();
         this.getTrigonBalance();
+        this.getSellCommission();
+        this.getPrice();
 
         if(this.ethereum) {
             this.w3.setProvider(this.ethereum);
@@ -141,22 +194,25 @@ class SellContent extends Component {
 
         contract.events.Price().on('data', async (event) => {
 
-            this.getSellCommission();
+            this.getSellCommission().then(() => {
+                let basePrice = parseFloat(event.returnValues.value)/10e18;
 
-            let basePrice = parseFloat(event.returnValues.value)/10e18;
-
-            this.setState({
-                basePrice: basePrice,
+                this.setState({
+                    basePrice: basePrice,
+                });
             });
+
         })
         .on('error', console.error);
 
-        setInterval(this.getBalance, 1000);
     }
 
     render() {
         return(
             <div className="flex flex-col w-11/12 md:w-11/12 mx-auto md:mx-0 md:ml-1">
+                {
+                    this.state.show_overlay && <Overlay />
+                }
                 {
                     this.state.show_modal && <CompletedModal closeModal={this.closeModal} processing={this.state.transaction_processing} success={this.state.transaction_success} transaction={this.state.success_transaction}/>
                 }
@@ -173,9 +229,13 @@ class SellContent extends Component {
                     <div className="flex flex-col pt-5 w-11/12 mx-auto mb-3">
                         <div className="flex flex-row justify-between">
                             <label htmlFor="buy" className="mb-2">TRGN SALE amount</label>
-                            <p>You have {this.state.trigon_balance} TRGN</p>
+                            {
+                                this.state.showBalance 
+                                ?   <p>You have {this.state.trigon_balance} TRGN</p>
+                                :   <p>You receive {this.state.calculatedPrice.toFixed(8)}</p>
+                            }
                         </div>
-                        <input onChange={(e) => this.setState({amount: e.target.value})} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
+                        <input onChange={(e) => this.calculatePrice(e)} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
                     </div>
                     <div className="flex flex-row justify-between w-11/12 pb-5 md:pb-64 mx-auto">
                         <span onClick={this.clearInput} className="py-2 px-3 border-2 border-trigon_gray-100 bg-trigon_gray-300 hover:bg-trigon_gray-100 rounded-lg cursor-pointer">Clear</span>

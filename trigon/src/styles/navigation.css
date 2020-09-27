@@ -2,6 +2,22 @@
     grid-template-rows: repeat(12, minmax(0, 1fr));
 }
 
+#social {
+    grid-row: 11;
+}
+
+#facebook:hover {
+    fill: #FFF;
+}
+
+#twitter:hover {
+    fill: #FFF;
+}
+
+#youtube:hover {
+    fill: #FFF;
+}
+
 .active {
     background-color: rgba(255, 255, 255, 0.2);
 }

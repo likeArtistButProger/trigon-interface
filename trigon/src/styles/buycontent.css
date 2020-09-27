@@ -4,6 +4,10 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 
+#referral_link:hover {
+    text-decoration: underline;
+}
+
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
