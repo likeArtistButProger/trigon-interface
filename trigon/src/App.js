@@ -17,12 +17,12 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/wallet/" component={Main}/>
-        <Route exact path="/wallet/buy" component={BuyComponent}/>
-        <Route exact path="/wallet/sell" component={SellComponent}/>
-        <Route exact path="/wallet/send" component={SendComponent}/>
-        <Route exact path="/wallet/referral" component={ReferalsComponent}/>
-        <Route exact path="/wallet/support" component={Support}/>
+        <Route exact path="/" component={Main}/>
+        <Route exact path="/buy" component={BuyComponent}/>
+        <Route exact path="/sell" component={SellComponent}/>
+        <Route exact path="/send" component={SendComponent}/>
+        <Route exact path="/referral" component={ReferalsComponent}/>
+        <Route exact path="/support" component={Support}/>
       </Switch>
     </BrowserRouter>
   );
