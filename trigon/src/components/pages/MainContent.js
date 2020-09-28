@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { LineChart, XAxis, Tooltip, CartesianGrid, Line } from 'recharts';
 import TopBar from '../common/TopBar';
 import axios from 'axios';
 import moment from 'moment';
@@ -318,17 +317,6 @@ class MainContent extends Component {
                 </div>
                 <div className="w-11/12">
                     <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12 mx-auto mt-8">Trigon chart</h1>
-                    <LineChart
-                    width={this.state.chart_width}
-                    height={400}
-                    data={chartData}
-                    margin={{ top: 5, right: 0, left: this.state.chart_margin, bottom: 5 }}
-                    >
-                    <XAxis dataKey="name" />
-                    <Tooltip />
-                    <CartesianGrid stroke="#f5f5f5" />
-                    <Line type="monotone" dataKey="eth" stroke="#ff7300" yAxisId={0} />
-                    </LineChart>
                 </div>
             </div>
         );
