@@ -5,6 +5,8 @@ import moment from 'moment';
 
 import '../../styles/maincontent.css';
 import TrigonImage from '../../assets/trigon_coin.png';
+import Chart from '../common/Chart';
+import ParentSize from '@visx/responsive/lib/components/ParentSize';
 
 import { contract, methods } from '../../trigon_interface/interface';
 
@@ -16,9 +18,9 @@ class MainContent extends Component {
         this.ethereum = window.ethereum;
 
         this.state = {
-            chartData: [],
-            chart_width: window.innerWidth >= 767 ? window.innerWidth*0.87 : window.innerWidth*0.9,
-            chart_margin: window.innerWidth >= 767 ? window.innerWidth/25 : 5,
+            chart_data: [{"close":0.0002834693520875075,"date":"2020-09-29T17:01:23.740Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:24.192Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:25.196Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:26.196Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:27.192Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:28.197Z"}],
+            chart_width: 0,
+            chart_height: window.innerWidth >= 767 ? 600 : 300,
             lastMonthPrice: 0,
             account_eth_balance: 0,
             trigon_balance: 0,
@@ -35,10 +37,28 @@ class MainContent extends Component {
         }
     }
 
+    getChartData = async () => {
+        await axios.get('/api/chart').then(res => {
+            const chartPrices = res.data.prices;
+            console.log("Chartdata:", res.data);
+    
+            this.setState({
+                chart_data: chartPrices,
+                lastMonthPrice: res.data.lastMonthPrice 
+            });
+
+            return 0;
+        })
+    }
+
+    componentWillMount() {
+        this.getChartData();
+    }
+
     updateSize = () => {
         this.setState({
-            chart_width: window.innerWidth >= 767 ? window.innerWidth*0.87 : window.innerWidth*0.9,
-            chart_margin: window.innerWidth >= 767 ? window.innerWidth/28 : 5
+            chart_width: this.chartRect.getBoundingClientRect().width,
+            chart_height: window.innerWidth >= 767 ? 600 : 300
         })
     }
 
@@ -126,26 +146,6 @@ class MainContent extends Component {
         });
     }
 
-    getChartData = async () => {
-        await axios.get('/api/chart').then(res => {
-            const chartPrices = res.data.prices;
-            console.log("Chartdata:", res.data);
-            let chartData = []
-
-            for(let i = 0; i < chartPrices.length; i++) {
-                chartData.push({
-                    name: `${moment(chartPrices[i].date).format("DD.MM.YYYY")}`,
-                    eth: chartPrices[i].price
-                });
-            }
-
-            this.setState({
-                chartData: chartData,
-                lastMonthPrice: res.data.lastMonthPrice 
-            })
-        })
-    }
-
     updatePercents = () => {
         let { lastMonthPrice, buyPrice, sellPrice, buyCommission, sellCommission }  = this.state;
         
@@ -162,6 +162,16 @@ class MainContent extends Component {
         let sellPercent = diffSell / lastSell;
         let buyPercent = diffBuy / lastBuy;
 
+        console.log(sellPercent, buyPercent);
+
+        if(sellPercent === Infinity || sellPercent === undefined) {
+            sellPercent = 0;
+        }
+
+        if(buyPercent === Infinity || buyPercent === undefined) {
+            buyPercent = 0;
+        }
+
         this.setState({
             sellPercent: parseInt(sellPercent),
             buyPercent: parseInt(buyPercent)
@@ -171,12 +181,16 @@ class MainContent extends Component {
     componentDidMount() {
         window.addEventListener('resize', this.updateSize);
 
+        this.setState({
+            chart_width: this.chartRect.getBoundingClientRect().width
+        });
+
         this.getBalance();
         this.getTrigonBalance();
         this.getTotalSupply();
         this.getTotalEthSupply();
         this.getEtheriumPrice();
-        this.getChartData();
+        // this.getChartData();
         this.getBuyCommission()
         .then(async () => {
             await this.getSellComission()
@@ -185,7 +199,8 @@ class MainContent extends Component {
             await this.getPrice()
         })
         .then(async () => {
-            await this.getChartData();
+            // await this.getChartData();
+            // console.log(this.state.chart_data);
         })
         .then(async () => {
             console.log(this.state);
@@ -230,6 +245,12 @@ class MainContent extends Component {
             });
         })
         .on('error', console.error);
+
+        contract.events.Transfer().on('data', async (event) => {
+            this.getTrigonBalance();
+        }).on('error', (error) => {
+            console.log(error);
+        })
 
         console.log(methods);
         // setInterval(this.getBalance, 1000);
@@ -315,8 +336,9 @@ class MainContent extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="w-11/12">
-                    <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12 mx-auto mt-8">Trigon chart</h1>
+                <div ref={node => this.chartRect = node} className="w-11/12 mx-auto">
+                    <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12 mt-8">Trigon chart</h1>
+                    <ParentSize>{({ width, height }) => <Chart width={this.state.chart_width} height={400} chart_data={this.state.chart_data} />}</ParentSize>
                 </div>
             </div>
         );

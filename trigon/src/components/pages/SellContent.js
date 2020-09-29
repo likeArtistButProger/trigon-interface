@@ -205,6 +205,12 @@ class SellContent extends Component {
         })
         .on('error', console.error);
 
+        contract.events.Transfer().on('data', async (event) => {
+            this.getTrigonBalance();
+        }).on('error', (error) => {
+            console.log(error);
+        })
+
     }
 
     render() {

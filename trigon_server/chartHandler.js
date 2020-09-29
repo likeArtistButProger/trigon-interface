@@ -25,11 +25,12 @@ class ChartHandler {
     }
 
     writePrices(newPrice, newDate) {
-        this.chartPrices = [...this.chartPrices, {price: newPrice, date: newDate }];
+        this.chartPrices = [...this.chartPrices, {close: newPrice, date: newDate }];
         let writeData = {
             prices: this.chartPrices,
             lastMonthPrice: this.lastMonthPrice
-        }
+        };
+
         fs.truncate('./prices.json', 0, function() {});
         fs.writeFile('./prices.json', JSON.stringify(writeData), () => {
 
@@ -42,17 +43,19 @@ class ChartHandler {
                 this.nextPrice = res/10e17;
                 this.nextDate = new Date();
 
-                if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
-                    this.lastMonthPrice = this.nextPrice;
-                    this.lastMonth = this.nextDate;
-                }
+                this.lastMonthPrice = this.chartPrices.length > 0 ? this.chartPrices[0].close : 0.001
 
-                this.writePrices(res/10e18, this.nextDate);
+                // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+                //     this.lastMonthPrice = this.nextPrice;
+                //     this.lastMonth = this.nextDate;
+                // }
+
+                this.writePrices(res/10e18, this.nextDate.toISOString());
             });
             
         }
 
-        setInterval(getPrice, 15000); //2.628e6
+        setInterval(getPrice, 100); //2.628e6
     }
 }
 

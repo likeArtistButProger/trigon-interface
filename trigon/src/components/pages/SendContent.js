@@ -6,7 +6,7 @@ import Overlay from '../common/Overlay';
 
 import '../../styles/buycontent.css';
 
-import { methods } from '../../trigon_interface/interface';
+import { contract, methods } from '../../trigon_interface/interface';
 
 class SendContent extends Component {
     constructor(props) {
@@ -82,6 +82,12 @@ class SendContent extends Component {
                 this.getBalance();
             })
         }
+
+        contract.events.Transfer().on('data', async (event) => {
+            this.getTrigonBalance();
+        }).on('error', (error) => {
+            console.log(error);
+        })
 
         setInterval(this.getBalance, 1000);
     }

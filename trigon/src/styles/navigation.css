@@ -3,7 +3,8 @@
 }
 
 #social {
-    grid-row: 11;
+    grid-row-start: 10;
+    grid-row-end: 12;
 }
 
 #facebook:hover {
@@ -15,6 +16,10 @@
 }
 
 #youtube:hover {
+    fill: #FFF;
+}
+
+#telegram:hover {
     fill: #FFF;
 }
 

@@ -5,7 +5,7 @@ const port = process.env.PORT || 3000;
 const ChartHandler = require('./chartHandler');
 const fs = require('fs');
 
-ChartHandler.ChartHandler.readPrices();
+// ChartHandler.ChartHandler.readPrices();
 ChartHandler.ChartHandler.startPriceTimer();
 
 app.use(express.static(path.resolve(__dirname, 'build')));

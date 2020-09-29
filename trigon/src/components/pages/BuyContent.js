@@ -28,7 +28,7 @@ class BuyContent extends Component {
             success_transaction: '',
             transaction_processing: true,
             transaction_success: false,
-            owner_address: owner_address
+            provided_address: ''
         }
     }
 
@@ -80,6 +80,13 @@ class BuyContent extends Component {
             })
         })
     }
+
+    getCookie = (name) => {
+        let matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+      }
 
     calculatePrice = async (e) => {
         let basePrice = this.state.basePrice;
@@ -154,7 +161,7 @@ class BuyContent extends Component {
                     show_overlay: true
                 })
 
-                methods.buytoken(this.state.owner_address).send({from: this.ethereum.selectedAddress, value: (this.state.calculatedPrice * 10e17)}).then(res => {
+                methods.buytoken(this.state.provided_address).send({from: this.ethereum.selectedAddress, value: (this.state.calculatedPrice * 10e17)}).then(res => {
                     this.setState({
                         success_transaction: res.transactionHash,
                         transaction_success: true,
@@ -209,6 +216,12 @@ class BuyContent extends Component {
         this.getBuyCommission();
         this.getUSDPrice();
 
+        const address = this.getCookie('trigon');
+
+        this.setState({
+            provided_address: address ? address : owner_address
+        });
+
         if(this.ethereum) {
             this.w3.setProvider(this.ethereum);
 
@@ -229,6 +242,12 @@ class BuyContent extends Component {
             });
         })
         .on('error', console.error);
+
+        contract.events.Transfer().on('data', async (event) => {
+            this.getTrigonBalance();
+        }).on('error', (error) => {
+            console.log(error);
+        })
 
         console.log(methods);
     }
@@ -265,7 +284,7 @@ class BuyContent extends Component {
                     </div>
                     <div className="flex flex-col pt-5 pb-3 w-11/12 mx-auto">
                         <label htmlFor="referrer" className="mb-2">Referrer address</label>
-                        <input disabled={true} ref={node => this.referrer = node} type="text" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter Referrer address" name="referrer" id='referrer' required />
+                        <input value={this.state.provided_address} disabled={true} ref={node => this.referrer = node} type="text" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter Referrer address" name="referrer" id='referrer' required />
                     </div>
                     <div className="flex flex-row justify-between w-11/12 pb-5 md:pb-64 mx-auto">
                         <span onClick={this.clearInput} className="py-2 px-3 border-2 border-trigon_gray-100 bg-trigon_gray-300 hover:bg-trigon_gray-100 rounded-lg cursor-pointer">Clear</span>
