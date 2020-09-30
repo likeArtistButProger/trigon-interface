@@ -5,10 +5,13 @@ import moment from 'moment';
 
 import '../../styles/maincontent.css';
 import TrigonImage from '../../assets/trigon_coin.png';
-import Chart from '../common/Chart';
+import Chart from '../common/NewChart';
 import ParentSize from '@visx/responsive/lib/components/ParentSize';
 
+
+
 import { contract, methods } from '../../trigon_interface/interface';
+import NewChart from '../common/NewChart';
 
 class MainContent extends Component {
     constructor(props) {
@@ -18,7 +21,7 @@ class MainContent extends Component {
         this.ethereum = window.ethereum;
 
         this.state = {
-            chart_data: [{"close":0.0002834693520875075,"date":"2020-09-29T17:01:23.740Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:24.192Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:25.196Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:26.196Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:27.192Z"},{"close":0.0002834693520875075,"date":"2020-09-29T17:01:28.197Z"}],
+            chart_data: [{"close":1.0002834693520875075,"date":"2020-09-29T17:01:23.740Z"},{"close":2.0002834693520875075,"date":"2020-09-29T17:01:24.192Z"},{"close":3.0002834693520875075,"date":"2020-09-29T17:01:25.196Z"},{"close":4.0002834693520875075,"date":"2020-09-29T17:01:26.196Z"},{"close":3.0002834693520875075,"date":"2020-09-29T17:01:27.192Z"},{"close":5.0002834693520875075,"date":"2020-09-29T17:01:28.197Z"}],
             chart_width: 0,
             chart_height: window.innerWidth >= 767 ? 600 : 300,
             lastMonthPrice: 0,
@@ -43,7 +46,7 @@ class MainContent extends Component {
             console.log("Chartdata:", res.data);
     
             this.setState({
-                chart_data: chartPrices,
+                // chart_data: chartPrices,
                 lastMonthPrice: res.data.lastMonthPrice 
             });
 
@@ -70,7 +73,7 @@ class MainContent extends Component {
                 const balance = await this.w3.eth.getBalance(address, (error, balance) => {
                     eth_balance = this.w3.fromWei(balance, "ether") + "";
                     eth_balance = parseFloat(eth_balance).toFixed(4);
-                    console.log("Eth balance:", eth_balance);
+                    // console.log("Eth balance:", eth_balance);
                     this.setState({
                         account_eth_balance: eth_balance
                     })
@@ -162,7 +165,11 @@ class MainContent extends Component {
         let sellPercent = diffSell / lastSell;
         let buyPercent = diffBuy / lastBuy;
 
-        console.log(sellPercent, buyPercent);
+        // console.log("Last price:", lastMonthPrice);
+        // console.log("Last sell:", lastBuy);
+        // console.log("Diffbuy:", diffBuy);
+        // console.log("buyPercent:", buyPercent);
+
 
         if(sellPercent === Infinity || sellPercent === undefined) {
             sellPercent = 0;
@@ -171,6 +178,9 @@ class MainContent extends Component {
         if(buyPercent === Infinity || buyPercent === undefined) {
             buyPercent = 0;
         }
+
+        sellPercent *= 100;
+        buyPercent *= 100;
 
         this.setState({
             sellPercent: parseInt(sellPercent),
@@ -200,7 +210,6 @@ class MainContent extends Component {
         })
         .then(async () => {
             // await this.getChartData();
-            // console.log(this.state.chart_data);
         })
         .then(async () => {
             console.log(this.state);
@@ -217,9 +226,6 @@ class MainContent extends Component {
         }
 
         contract.events.Price().on('data', async (event) => {
-
-            console.log(event);
-            console.log(event.returnValues);
 
             await this.getBuyCommission()
             .then(async () => {
@@ -239,9 +245,10 @@ class MainContent extends Component {
                     totalSupply: totalSupply
                 });
     
-                this.getTrigonBalance();
-                this.getEtheriumPrice();
-                this.getTotalEthSupply();
+                await this.getTrigonBalance();
+                await this.getEtheriumPrice();
+                await this.getTotalEthSupply();
+                await this.updatePercents();
             });
         })
         .on('error', console.error);
@@ -260,8 +267,11 @@ class MainContent extends Component {
         window.removeEventListener('resize', this.updateSize);
     }
 
+    // componentDidUpdate() {
+    //     console.log(this.state.chart_data);
+    // }
+
     render () {
-        let { chartData } = this.state
 
         return (
             <div className="flex flex-col w-11/12 mx-auto xl:mx-0 xl:ml-1">
@@ -336,9 +346,9 @@ class MainContent extends Component {
                         </div>
                     </div>
                 </div>
-                <div ref={node => this.chartRect = node} className="w-11/12 mx-auto">
+                <div ref={node => this.chartRect = node} className="md:w-11/12 md:mx-auto">
                     <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12 mt-8">Trigon chart</h1>
-                    <ParentSize>{({ width, height }) => <Chart width={this.state.chart_width} height={400} chart_data={this.state.chart_data} />}</ParentSize>
+                    <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width} height={400} chart_data={this.state.chart_data} />}</ParentSize>
                 </div>
             </div>
         );

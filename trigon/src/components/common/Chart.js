@@ -19,8 +19,8 @@ const chartSeparation = 30;
 const PATTERN_ID = 'brush_pattern';
 const GRADIENT_ID = 'brush_gradient';
 export const accentColor = '#252529'; //'#7AC231';
-export const background = '#606166'; //'#42434B'; 
-export const background2 = '#42434B'; // '#7AC231';
+export const background = '#42434B'; //'#42434B'; 
+export const background2 = '#606166'; // '#7AC231';
 const selectedBrushStyle = {
   fill: `url(#${PATTERN_ID})`,
   stroke: 'white',
@@ -41,9 +41,6 @@ const selectedBrushStyle = {
 //
 //
 //
-
-
-console.log(stock[0])
 
 // accessors
 const getDate = (d) => new Date(d.date);
@@ -124,7 +121,7 @@ function Chart({
   const initialBrushPosition = useMemo(
     () => ({
       start: { x: brushDateScale(getDate(chart_data[0])) },
-      end: { x: brushDateScale(getDate(chart_data[3])) },
+      end: { x: brushDateScale(getDate(chart_data[5])) },
     }),
     [brushDateScale],
   );

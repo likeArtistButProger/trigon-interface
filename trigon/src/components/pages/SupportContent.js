@@ -106,6 +106,10 @@ class SendContent extends Component {
                             <h2>What if I have other questions?</h2>
                             <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">You're welcome to join our social groups, where you can get all the answers from fellow TRGN holders and the Trigon team. All links you can find on the left under the menu.</div>
                         </div>
+                        <div className="mt-3 mb-6">
+                            <h2>Why do i see a notice about the possible price change?</h2>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Smart contract increases the price every time the token is bought or sold. Therefore, if someone bought a token just before you click the buy button, then the buy price of the token will rise for you. This may not occure in your case, but the notice is there so you know it is possible.</div>
+                        </div>
                     </div>
                 </div>
             </div>

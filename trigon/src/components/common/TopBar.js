@@ -8,6 +8,7 @@ class TopBar extends Component {
         super(props);
 
         this.ethereum = window.ethereum; 
+        this.w3 = window.web3;
 
         this.state = {
             loggedIn: false,

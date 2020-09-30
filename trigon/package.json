@@ -10,13 +10,16 @@
     "@visx/axis": "^1.0.0",
     "@visx/brush": "^1.0.0",
     "@visx/curve": "^1.0.0",
+    "@visx/event": "^1.0.0",
     "@visx/gradient": "^1.0.0",
+    "@visx/grid": "^1.0.0",
     "@visx/group": "^1.0.0",
     "@visx/mock-data": "^1.0.0",
     "@visx/pattern": "^1.0.0",
     "@visx/responsive": "^1.0.0",
     "@visx/scale": "^1.0.0",
     "@visx/shape": "^1.0.0",
+    "@visx/tooltip": "^1.0.0",
     "axios": "^0.20.0",
     "moment": "^2.29.0",
     "react": "^16.13.1",
@@ -54,5 +57,6 @@
     "autoprefixer": "^9.8.6",
     "postcss-cli": "^7.1.2",
     "tailwindcss": "^1.8.7"
-  }
+  },
+  "proxy": "http://localhost:4000"
 }

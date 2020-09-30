@@ -284,7 +284,7 @@ class BuyContent extends Component {
                     </div>
                     <div className="flex flex-col pt-5 pb-3 w-11/12 mx-auto">
                         <label htmlFor="referrer" className="mb-2">Referrer address</label>
-                        <input value={this.state.provided_address} disabled={true} ref={node => this.referrer = node} type="text" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter Referrer address" name="referrer" id='referrer' required />
+                        <input value={this.state.provided_address} disabled={true} ref={node => this.referrer = node} type="text" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-xs md:text-lg" placeholder="Enter Referrer address" name="referrer" id='referrer' required />
                     </div>
                     <div className="flex flex-row justify-between w-11/12 pb-5 md:pb-64 mx-auto">
                         <span onClick={this.clearInput} className="py-2 px-3 border-2 border-trigon_gray-100 bg-trigon_gray-300 hover:bg-trigon_gray-100 rounded-lg cursor-pointer">Clear</span>
