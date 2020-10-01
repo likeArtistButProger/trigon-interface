@@ -22,7 +22,7 @@ function App() {
         <Route exact path="/sell" component={SellComponent}/>
         <Route exact path="/send" component={SendComponent}/>
         <Route exact path="/referral" component={ReferalsComponent}/>
-        <Route exact path="/support" component={Support}/>
+        <Route exact path="/faq" component={Support}/>
       </Switch>
     </BrowserRouter>
   );

@@ -4,6 +4,14 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import '../../styles/overlay.css';
 
 class Overlay extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            linkIsBuy: window.location.pathname === '/buy' ? true : false
+        }
+    }
+
     render() {
         return (
             <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)", zIndex: '2'}} className="absolute top-0 left-0 w-screen h-screen">
@@ -15,8 +23,10 @@ class Overlay extends Component {
                             color={'#7AC231'}
                         />
                     </div>
-                   
-                    <p style={{color: "#e6a800"}} className="mt-1 text-sm text-center font-trigon_regular">Note: Token price may change while your transaction is not completed.</p>
+                    {   
+                        this.state.linkIsBuy &&
+                        <p style={{color: "#e6a800"}} className="mt-1 text-sm text-center font-trigon_regular">Note: Token price may change while your transaction is not completed.</p>
+                    }
                 </div>
             </div>
         );

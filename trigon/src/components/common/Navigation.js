@@ -85,7 +85,7 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a style={{gridRowStart: '8'}} href="/support">
+                <a style={{gridRowStart: '8'}} href="/faq">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 5 ? "active" : "")}>
                         <svg className="h-full mx-auto pl-1 mb-1" width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M26 18H24V27H11V29C11 29.55 11.45 30 12 30H23L27 34V19C27 18.45 26.55 18 26 18ZM22 24V15C22 14.45 21.55 14 21 14H8C7.45 14 7 14.45 7 15V29L11 25H21C21.55 25 22 24.55 22 24Z" fill="#979797"/>
