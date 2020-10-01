@@ -215,7 +215,7 @@ class MainContent extends Component {
         this.getTotalSupply();
         this.getTotalEthSupply();
         this.getEtheriumPrice();
-        // this.getChartData();
+        this.getChartData();
         this.getBuyCommission()
         .then(async () => {
             await this.getSellComission()
@@ -250,7 +250,9 @@ class MainContent extends Component {
                 let basePrice = parseFloat(event.returnValues.value)/10e17;
                 let totalSupply = (parseFloat(event.returnValues.totalSupply)/10e17).toFixed(3);
     
-                let buyPrice = basePrice/(1 - this.state.buyCommission);
+                let { admin_commission, ref_commission, growth_commission } = this.state;
+
+                let buyPrice = (basePrice * (1 * admin_commission * ref_commission))/(1 - growth_commission);
                 let sellPrice = (1 - this.state.sellCommission) * basePrice;
 
                 this.setState({
