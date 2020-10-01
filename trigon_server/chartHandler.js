@@ -1,5 +1,7 @@
 const contract = require('./trigon_interface/interface');
 const fs = require('fs');
+const moment = require('moment');
+const { relativeTimeThreshold } = require('moment');
 
 class ChartHandler {
     constructor() {
@@ -9,6 +11,7 @@ class ChartHandler {
         this.nextDate = new Date();
         this.lastMonth = new Date();
         this.chartPrices = [];
+        this.dates = [];
     }
 
     addRecord(record) {
@@ -17,17 +20,22 @@ class ChartHandler {
 
     readPrices() {
         fs.readFile('./prices.json', 'utf-8', (err, data) => {
-            if(err) console.log(err);
+            if(err) return;
             let newData = JSON.parse(data);
             this.chartPrices = newData.prices;
+            this.dates = newData.dates;
             this.lastMonthPrice = newData.lastMonthPrice;
         });
     }
 
     writePrices(newPrice, newDate) {
-        this.chartPrices = [...this.chartPrices, {close: newPrice, date: newDate }];
+        let formatedDate = moment(newDate).format("DD.MM.YYYY");
+
+        this.chartPrices = [...this.chartPrices, newPrice ];
+        this.dates = [...this.dates, formatedDate]
         let writeData = {
             prices: this.chartPrices,
+            dates: this.dates,
             lastMonthPrice: this.lastMonthPrice
         };
 
@@ -50,12 +58,12 @@ class ChartHandler {
                 //     this.lastMonth = this.nextDate;
                 // }
 
-                this.writePrices(res/10e18, this.nextDate.toISOString());
+                this.writePrices(res/10e18, this.nextDate);
             });
             
         }
 
-        setInterval(getPrice, 15000); //2.628e6
+        setInterval(getPrice, 2000); //2.628e6
     }
 }
 

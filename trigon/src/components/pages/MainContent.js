@@ -7,11 +7,13 @@ import '../../styles/maincontent.css';
 import TrigonImage from '../../assets/trigon_coin.png';
 import Chart from '../common/NewChart';
 import ParentSize from '@visx/responsive/lib/components/ParentSize';
-
-
+import CreatePlotlyComponent from 'react-plotlyjs';
+import Plotly from 'plotly.js/dist/plotly-cartesian';
 
 import { contract, methods } from '../../trigon_interface/interface';
 import NewChart from '../common/NewChart';
+
+const PlotlyComponent = CreatePlotlyComponent(Plotly);
 
 class MainContent extends Component {
     constructor(props) {
@@ -21,7 +23,8 @@ class MainContent extends Component {
         this.ethereum = window.ethereum;
 
         this.state = {
-            chart_data: [{"close":1.0002834693520875075,"date":"2020-09-29T17:01:23.740Z"},{"close":2.0002834693520875075,"date":"2020-09-29T17:01:24.192Z"},{"close":3.0002834693520875075,"date":"2020-09-29T17:01:25.196Z"},{"close":4.0002834693520875075,"date":"2020-09-29T17:01:26.196Z"},{"close":3.0002834693520875075,"date":"2020-09-29T17:01:27.192Z"},{"close":5.0002834693520875075,"date":"2020-09-29T17:01:28.197Z"}],
+            chart_data: [],
+            chart_dates: [],
             chart_width: 0,
             chart_height: window.innerWidth >= 767 ? 600 : 300,
             lastMonthPrice: 0,
@@ -33,7 +36,9 @@ class MainContent extends Component {
             buyPrice: 0,
             sellPrice: 0,
             usd_price: 0,
-            buyCommission: 0,
+            growth_commission: 0,
+            admin_commission: 0,
+            ref_commission: 0,
             sellCommission: 0,
             sellPercent: 0,
             buyPercent: 0
@@ -43,10 +48,12 @@ class MainContent extends Component {
     getChartData = async () => {
         await axios.get('/api/chart').then(res => {
             const chartPrices = res.data.prices;
-            console.log("Chartdata:", res.data);
-    
+            const chartDates = res.data.dates;
+
+
             this.setState({
                 chart_data: chartPrices,
+                chart_dates: chartDates,
                 lastMonthPrice: res.data.lastMonthPrice 
             });
 
@@ -115,9 +122,15 @@ class MainContent extends Component {
     }
 
     getBuyCommission = async () => {
+        const admin_commission = await methods.getCommissionAdmin().call().then(res => res);
+        const ref_commission = await methods.getCommissionRef().call().then(res => res);
+        const growth_commission = await methods.getCommissionCost().call().then(res => res);
+
         await methods.getCommission().call().then(res => {
             this.setState({
-                buyCommission: (parseInt(res[1]) + parseInt(res[2]) + parseInt(res[3]))/100
+                growth_commission: parseFloat(growth_commission)/100, 
+                admin_commission: parseFloat(admin_commission)/100,
+                ref_commission: parseFloat(ref_commission)/100
             })
         })
     }
@@ -141,22 +154,24 @@ class MainContent extends Component {
     getPrice = async () => {
         await methods.price().call().then(res => {
             let basePrice = res/10e17;
+            let adm_com = this.state.admin_commission;
+            let ref_com = this.state.ref_commission;
             this.setState({
                 basePrice: basePrice,
-                buyPrice: (basePrice/(1 - this.state.buyCommission)),
+                buyPrice: ((basePrice*(1+adm_com+ref_com))/(1 - this.state.growth_commission)),
                 sellPrice: ((1 - this.state.sellCommission) * basePrice)
             });
         });
     }
 
     updatePercents = () => {
-        let { lastMonthPrice, buyPrice, sellPrice, buyCommission, sellCommission }  = this.state;
+        let { lastMonthPrice, buyPrice, sellPrice, ref_commission, admin_commission, growth_commission, sellCommission }  = this.state;
         
         lastMonthPrice = parseFloat(lastMonthPrice);
 
 
         let lastSell = (1 - sellCommission) * lastMonthPrice;
-        let lastBuy = lastMonthPrice / (1 - buyCommission);
+        let lastBuy = (lastMonthPrice * (1 + admin_commission + ref_commission)) / (1 - growth_commission);
 
 
         let diffSell = sellPrice - lastSell;
@@ -348,7 +363,25 @@ class MainContent extends Component {
                 </div>
                 <div ref={node => this.chartRect = node} className="md:w-11/12 md:mx-auto">
                     <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12 mt-8">Trigon chart</h1>
-                    <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width} height={400} chart_data={this.state.chart_data} />}</ParentSize>
+                    {/* <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width} height={400} chart_data={this.state.chart_data} />}</ParentSize> */}
+                    <PlotlyComponent 
+                     data={[
+                         {
+                             type: 'scatter',
+                             x: this.state.chart_dates,
+                             y: this.state.chart_data,
+                             marker: {
+                                color: '#7AC231'
+                             }
+                         }
+                     ]}
+                     
+                     config={{
+                            showLink: true,
+                        }
+                     }
+                     layout={{width: this.chart_width, height: 400, useResizeHandler: true}}
+                     />
                 </div>
             </div>
         );

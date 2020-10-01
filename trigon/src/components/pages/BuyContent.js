@@ -18,7 +18,9 @@ class BuyContent extends Component {
             account_eth_balance: 0,
             trigon_balance: 0,
             basePrice: 0,
-            buyCommission: 0,
+            admin_commission: 0,
+            ref_commission: 0,
+            growth_commission: 0,
             buyPrice: 0,
             calculatedPrice: 0,
             usd_price: 0,
@@ -90,7 +92,7 @@ class BuyContent extends Component {
 
     calculatePrice = async (e) => {
         let basePrice = this.state.basePrice;
-        let commisssion = this.state.buyCommission;
+        let { admin_commission, ref_commission, growth_commission } = this.state;
         let amount = parseFloat(e.target.value);
         
         if(isNaN(amount)) {
@@ -101,7 +103,7 @@ class BuyContent extends Component {
             return
         }
 
-        let calculatedPrice = (basePrice / (1 - commisssion)) * amount;
+        let calculatedPrice = ((basePrice * (1 + admin_commission + ref_commission)) / (1 - growth_commission)) * amount;
 
         this.setState({
             calculatedPrice: calculatedPrice,
@@ -110,11 +112,15 @@ class BuyContent extends Component {
     }
 
     getBuyCommission = async () => {
-        methods.getCommission().call().then(res => {
-            this.setState({
-                buyCommission: (parseFloat(res[1]) + parseFloat(res[2]) + parseFloat(res[3]))/100
-            });
-        })
+        const admin_commission = await methods.getCommissionAdmin().call().then(res => res);
+        const ref_commission = await methods.getCommissionRef().call().then(res => res);
+        const growth_commission = await methods.getCommissionCost().call().then(res => res);
+
+        this.setState({
+            admin_commission: parseFloat(admin_commission)/100,
+            ref_commission: parseFloat(ref_commission)/100,
+            growth_commission: parseFloat(growth_commission)/100
+        });
     }
 
     getUSDPrice = () => {
