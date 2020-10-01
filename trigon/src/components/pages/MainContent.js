@@ -46,7 +46,7 @@ class MainContent extends Component {
             console.log("Chartdata:", res.data);
     
             this.setState({
-                // chart_data: chartPrices,
+                chart_data: chartPrices,
                 lastMonthPrice: res.data.lastMonthPrice 
             });
 

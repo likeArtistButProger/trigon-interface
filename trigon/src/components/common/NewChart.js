@@ -13,7 +13,7 @@ import { timeFormat } from 'd3-time-format';
 
 
 // const stock = appleStock.slice(800);
-export const background = '#606166';
+export const background = '#42434B';
 export const background2 = '#606166';
 export const accentColor = '#7AC231';
 export const accentColorDark = '#1D2024';
@@ -73,7 +73,7 @@ export default withTooltip(
         scaleLinear({
           range: [yMax, 0],
           domain: [0, (max(chart_data, getStockValue) || 0) + yMax / 3],
-          nice: false,  
+          nice: false,
         }),
       [yMax],
     );
