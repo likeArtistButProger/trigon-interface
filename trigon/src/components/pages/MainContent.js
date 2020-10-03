@@ -58,7 +58,9 @@ class MainContent extends Component {
 
             for(let i = 0; i < chartPrices.length; i++) {
                 let itemDate = new Date(chartDates[i]).getTime(); //moment(chartDates[i]).format("MM:HH DD.MM.YYYY");
-                chart_data.push([itemDate, chartPrices[i]]);
+                let itemPrice = parseFloat(chartPrices[i].toFixed(10));
+                console.log(itemPrice);
+                chart_data.push([itemDate, itemPrice]);
             }
 
             this.setState({

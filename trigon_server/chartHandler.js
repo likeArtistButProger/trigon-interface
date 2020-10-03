@@ -8,6 +8,7 @@ class ChartHandler {
         this.time = 0;
         this.nextPrice = 0;
         this.lastMonthPrice = 0;
+        this.sellCommission = 0;
         this.nextDate = new Date();
         this.lastMonth = new Date();
         this.chartPrices = [];
@@ -47,19 +48,27 @@ class ChartHandler {
         });
     }
 
+    getSellCommission = async () => {
+        await contract.methods.getCommissionCost().call().then(res => {
+            this.sellCommission = res/100;
+        });
+    }
+
     getInitialPrice() {
         contract.methods.price().call().then(res => {
-            this.nextPrice = res/10e14;
-            this.nextDate = new Date();
-
-            this.lastMonthPrice = 0.001;
-
-            // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
-            //     this.lastMonthPrice = this.nextPrice;
-            //     this.lastMonth = this.nextDate;
-            // }
-
-            this.writePrices(res/10e18, this.nextDate);
+            this.getSellCommission().then(() => {
+                this.nextPrice = (1 - this.sellCommission) * (res/10e17);
+                this.nextDate = new Date();
+    
+                this.lastMonthPrice = (1 - this.sellCommission) * 0.001;
+    
+                // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+                //     this.lastMonthPrice = this.nextPrice;
+                //     this.lastMonth = this.nextDate;
+                // }
+    
+                this.writePrices(this.nextPrice, this.nextDate);
+            });
         });
     }
 
@@ -67,20 +76,23 @@ class ChartHandler {
 
         const getPrice = async () => {
             await contract.methods.price().call().then(res => {
-                this.nextPrice = res/10e14;
-                this.nextDate = new Date();
-    
-                this.lastMonthPrice = 0.001;
-    
-                // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
-                //     this.lastMonthPrice = this.nextPrice;
-                //     this.lastMonth = this.nextDate;
-                // }
-    
-                this.writePrices(res/10e18, this.nextDate);
+                this.getSellCommission().then(() => {
+                    this.nextPrice = (1 - this.sellCommission) * (res/10e17);
+                    this.nextDate = new Date();
+        
+                    this.lastMonthPrice = (1 - this.sellCommission) * 0.001;
+        
+                    // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+                    //     this.lastMonthPrice = this.nextPrice;
+                    //     this.lastMonth = this.nextDate;
+                    // }
+        
+                    this.writePrices(this.nextPrice, this.nextDate);
+                });
+
             });
         }
-        
+
         setInterval(getPrice, 10000);
 
     }
@@ -90,17 +102,19 @@ class ChartHandler {
             console.log("Event happened:", event)
 
             contract.methods.price().call().then(res => {
-                this.nextPrice = res/10e14;
-                this.nextDate = new Date();
-    
-                this.lastMonthPrice = 0.001;
-    
-                // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
-                //     this.lastMonthPrice = this.nextPrice;
-                //     this.lastMonth = this.nextDate;
-                // }
-    
-                this.writePrices(res/10e18, this.nextDate);
+                this.getSellCommission().then(() => {
+                    this.nextPrice = (1 - this.sellCommission) * (res/10e17);
+                    this.nextDate = new Date();
+        
+                    this.lastMonthPrice = (1 - this.sellCommission) * 0.001;
+        
+                    // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+                    //     this.lastMonthPrice = this.nextPrice;
+                    //     this.lastMonth = this.nextDate;
+                    // }
+        
+                    this.writePrices(this.nextPrice, this.nextDate);
+                });
             });
         });
     }
