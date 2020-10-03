@@ -15,7 +15,7 @@ const w3 = new Web3(provider);
 // const pkl = '0xb34341006bea8e3275f7399c10db52a25dc86923aca0f0d88c2c048fd6d91cef';
 
 // let trigon_old = '0x77a1835381e98820651dEF3b8c8F04dD22983527';
-let trigon_new = '0x3C1014DcB7730C73F67eD4719FF9Ca52D4941087';
+export let trigon_new = '0x3C1014DcB7730C73F67eD4719FF9Ca52D4941087';
 trigon_new = w3.utils.toChecksumAddress(trigon_new);
 
 export const contract = new w3.eth.Contract(abi, trigon_new); 

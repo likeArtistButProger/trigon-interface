@@ -623,7 +623,7 @@ const abi = [
     }
   ]
 
-let trigon = '0x77a1835381e98820651dEF3b8c8F04dD22983527';
+let trigon = '0x3C1014DcB7730C73F67eD4719FF9Ca52D4941087';
 trigon = w3.utils.toChecksumAddress(trigon);
 
 const contract = new w3.eth.Contract(abi, trigon); 

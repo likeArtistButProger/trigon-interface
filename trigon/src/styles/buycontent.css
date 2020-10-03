@@ -8,6 +8,11 @@ input::-webkit-inner-spin-button {
     text-decoration: underline;
 }
 
+#copy:hover {
+    background: #979797;
+    fill: #333
+}
+
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;

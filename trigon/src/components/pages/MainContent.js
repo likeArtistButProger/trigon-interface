@@ -6,14 +6,16 @@ import moment from 'moment';
 import '../../styles/maincontent.css';
 import TrigonImage from '../../assets/trigon_coin.png';
 import Chart from '../common/NewChart';
+import TransactionCard from '../common/TransactionCard';
 import ParentSize from '@visx/responsive/lib/components/ParentSize';
-import CreatePlotlyComponent from 'react-plotlyjs';
-import Plotly from 'plotly.js/dist/plotly-cartesian';
 
-import { contract, methods } from '../../trigon_interface/interface';
+import Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
+
+import { trigon_new, contract, methods } from '../../trigon_interface/interface';
 import NewChart from '../common/NewChart';
 
-const PlotlyComponent = CreatePlotlyComponent(Plotly);
+import '../../styles/chart.css';
 
 class MainContent extends Component {
     constructor(props) {
@@ -25,6 +27,7 @@ class MainContent extends Component {
         this.state = {
             chart_data: [],
             chart_dates: [],
+            chart_options: {},
             chart_width: 0,
             chart_height: window.innerWidth >= 767 ? 600 : 300,
             lastMonthPrice: 0,
@@ -41,7 +44,8 @@ class MainContent extends Component {
             ref_commission: 0,
             sellCommission: 0,
             sellPercent: 0,
-            buyPercent: 0
+            buyPercent: 0,
+            transactions: []
         }
     }
 
@@ -50,10 +54,15 @@ class MainContent extends Component {
             const chartPrices = res.data.prices;
             const chartDates = res.data.dates;
 
+            let chart_data = [];
+
+            for(let i = 0; i < chartPrices.length; i++) {
+                let itemDate = new Date(chartDates[i]).getTime(); //moment(chartDates[i]).format("MM:HH DD.MM.YYYY");
+                chart_data.push([itemDate, chartPrices[i]]);
+            }
 
             this.setState({
-                chart_data: chartPrices,
-                chart_dates: chartDates,
+                chart_data: chart_data,
                 lastMonthPrice: res.data.lastMonthPrice 
             });
 
@@ -80,7 +89,6 @@ class MainContent extends Component {
                 const balance = await this.w3.eth.getBalance(address, (error, balance) => {
                     eth_balance = this.w3.fromWei(balance, "ether") + "";
                     eth_balance = parseFloat(eth_balance).toFixed(4);
-                    // console.log("Eth balance:", eth_balance);
                     this.setState({
                         account_eth_balance: eth_balance
                     })
@@ -180,12 +188,6 @@ class MainContent extends Component {
         let sellPercent = diffSell / lastSell;
         let buyPercent = diffBuy / lastBuy;
 
-        // console.log("Last price:", lastMonthPrice);
-        // console.log("Last sell:", lastBuy);
-        // console.log("Diffbuy:", diffBuy);
-        // console.log("buyPercent:", buyPercent);
-
-
         if(sellPercent === Infinity || sellPercent === undefined) {
             sellPercent = 0;
         }
@@ -203,8 +205,52 @@ class MainContent extends Component {
         });
     }
 
+    getTransactionsHistory = () => {
+        if(this.ethereum) {
+            console.log(this.ethereum.selectedAddress);
+            // const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${this.ethereum.selectedAddress}&startblock=0&endblock=99999999&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`;
+            const url = `https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3&startblock=0&endblock=2702578&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`
+            console.log("URL:", url);
+            axios.get(url)
+            .then(res => {
+                const data = res.data.result;
+
+                if(data.length === 0) return;
+
+                const clearData = data.map(transaction => {
+                    return {
+                        hash: transaction.hash,
+                        value: parseFloat(transaction.value)/10e18,
+                        type: transaction.type
+                    }
+                });
+
+                let reducedClearData = [];
+
+                for(let i = 0; i < 10; i++) {
+                    reducedClearData.push(clearData[i])
+                }
+
+                this.setState({
+                    transactions: reducedClearData
+                })
+
+                console.log("Clear data is:", clearData);
+
+            }).catch(err => {
+                console.log(err);
+            })
+        }    
+    }
+
     componentDidMount() {
         window.addEventListener('resize', this.updateSize);
+
+        this.getChartData().then(() => {
+            this.setState({
+            
+        });
+        }); 
 
         this.setState({
             chart_width: this.chartRect.getBoundingClientRect().width
@@ -215,7 +261,7 @@ class MainContent extends Component {
         this.getTotalSupply();
         this.getTotalEthSupply();
         this.getEtheriumPrice();
-        this.getChartData();
+        this.getTransactionsHistory();
         this.getBuyCommission()
         .then(async () => {
             await this.getSellComission()
@@ -224,7 +270,6 @@ class MainContent extends Component {
             await this.getPrice()
         })
         .then(async () => {
-            // await this.getChartData();
         })
         .then(async () => {
             console.log(this.state);
@@ -247,12 +292,12 @@ class MainContent extends Component {
                 await this.getSellComission()
             })
             .then(async () => {
-                let basePrice = parseFloat(event.returnValues.value)/10e17;
+                let basePrice =  parseFloat(event.returnValues.value)/10e17;
                 let totalSupply = (parseFloat(event.returnValues.totalSupply)/10e17).toFixed(3);
     
                 let { admin_commission, ref_commission, growth_commission } = this.state;
 
-                let buyPrice = (basePrice * (1 * admin_commission * ref_commission))/(1 - growth_commission);
+                let buyPrice = (basePrice * (1 + admin_commission + ref_commission))/(1 - growth_commission);
                 let sellPrice = (1 - this.state.sellCommission) * basePrice;
 
                 this.setState({
@@ -266,6 +311,7 @@ class MainContent extends Component {
                 await this.getEtheriumPrice();
                 await this.getTotalEthSupply();
                 await this.updatePercents();
+                      this.getChartData();
             });
         })
         .on('error', console.error);
@@ -283,10 +329,6 @@ class MainContent extends Component {
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateSize);
     }
-
-    // componentDidUpdate() {
-    //     console.log(this.state.chart_data);
-    // }
 
     render () {
 
@@ -363,27 +405,109 @@ class MainContent extends Component {
                         </div>
                     </div>
                 </div>
-                <div ref={node => this.chartRect = node} className="md:w-11/12 md:mx-auto">
-                    <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12 mt-8">Trigon chart</h1>
-                    {/* <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width} height={400} chart_data={this.state.chart_data} />}</ParentSize> */}
-                    <PlotlyComponent 
-                     data={[
-                         {
-                             type: 'scatter',
-                             x: this.state.chart_dates,
-                             y: this.state.chart_data,
-                             marker: {
-                                color: '#7AC231'
-                             }
-                         }
-                     ]}
-                     
-                     config={{
-                            showLink: true,
+                <div className="grid grid-cols-1 bg-trigon_gray-300 my-2 rounded-md md:w-11/12 md:mx-auto">
+                    {/* <div className="m-3">
+                        <h1 className="mb-2">History:</h1>
+                        {
+                            this.state.transactions.map(trans => {
+                                return <TransactionCard hash={trans.hash} type={trans.type} sum={trans.value} />
+                            })
                         }
-                     }
-                     layout={{width: this.chart_width, height: 400, useResizeHandler: true}}
-                     />
+                    </div> */}
+                    <div ref={node => this.chartRect = node} className="m-3">
+                      <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12">Trigon chart</h1>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={{
+                            chart: {
+                                className: "chart_container",
+                                type: "line",
+                                backgroundColor: "#252529",
+                                zoomType: 'x'
+                            },
+            
+                            plotOptions: {
+                                line: {
+                                    color: "#7AC231"
+                                }
+                            },
+                            
+                            series: [
+                                {   name: "Price",
+                                    data: this.state.chart_data,
+                                    marker: {
+                                        enabled: true,
+                                        radius: 3
+                                    },
+                                    shadow: true,
+                                    tooltip: {
+                                        
+                                    }
+                                }
+                            ],
+            
+                            title: {
+                                color: "#606166",
+                                text: "Trigon chart"
+                            },
+
+                            legend: {
+                                align: 'left',
+                                itemStyle: {
+                                    "color": "#7AC231"
+                                },
+                                labelFormat: "{name}",
+                                itemHoverStyle: {
+                                    "color": "#42434B"
+                                },
+                                itemHiddenStyle: {
+                                    "color": "#606166"
+                                },
+                                verticalAlign: 'top',
+                                x: -10,
+                                y: 0,
+                                floating: true
+                            },
+            
+                            // tooltip: {
+                            //     headerFormat: "",
+                            //     pointFormat: "{point.x:%e. %b}: {point.y:.2f} ETH",
+                            // },
+
+                            xAxis: {
+                                type: "datetime",
+                                // dateTimeLabelFormats: {
+                                //     month: '%e. %b',
+                                //     year: "%b"
+                                // },
+                                // tickInterval: 7 * 24 * 3600 * 1000,
+                                // tickWidth: 0,
+                                // gridLineWidth: 1,
+                                // labels: {
+                                // useHTML: true,
+                                // // format: ""
+                                // //     formatter: function () {
+                                // //         return "";
+                                // //     }
+                                // }
+                            },
+            
+                            yAxis: {
+
+                                labels: {
+                                    align: 'right',
+                                    x: -3,
+                                    format: '{value:.,0f}'
+                                },
+                                showFirstLabel: true,
+                                title: {
+                                    color: "#606166",
+                                    text: "Prices"
+                                }
+                            }
+                        }}/>
+                      {/* <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width-30} height={370} chart_data={this.state.chart_data} />}</ParentSize> */}
+                    </div>
                 </div>
             </div>
         );

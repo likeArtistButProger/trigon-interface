@@ -158,7 +158,7 @@ class BuyContent extends Component {
                 minPrice = (1.0 / this.state.usd_price) * 50;
 
                 if(this.state.calculatedPrice < minPrice) {
-                    alert(`Minimal buy price for tokens should be more than ${minPrice} ETH`)
+                    alert(`Minimal buy amount should be more than ${minPrice} ETH`)
                     return;
                 }
 

@@ -21,15 +21,17 @@ class ChartHandler {
     readPrices() {
         fs.readFile('./prices.json', 'utf-8', (err, data) => {
             if(err) return;
-            let newData = JSON.parse(data);
-            this.chartPrices = newData.prices;
-            this.dates = newData.dates;
-            this.lastMonthPrice = newData.lastMonthPrice;
+            if(data.length !== 0) {
+                let newData = JSON.parse(data);
+                this.chartPrices = newData.prices;
+                this.dates = newData.dates;
+                this.lastMonthPrice = newData.lastMonthPrice;
+            }
         });
     }
 
     writePrices(newPrice, newDate) {
-        let formatedDate = moment(newDate).format("DD.MM.YYYY");
+        let formatedDate = newDate;
 
         this.chartPrices = [...this.chartPrices, newPrice ];
         this.dates = [...this.dates, formatedDate]
@@ -45,25 +47,62 @@ class ChartHandler {
         });
     }
 
+    getInitialPrice() {
+        contract.methods.price().call().then(res => {
+            this.nextPrice = res/10e14;
+            this.nextDate = new Date();
+
+            this.lastMonthPrice = 0.001;
+
+            // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+            //     this.lastMonthPrice = this.nextPrice;
+            //     this.lastMonth = this.nextDate;
+            // }
+
+            this.writePrices(res/10e18, this.nextDate);
+        });
+    }
+
     startPriceTimer() {
-        const getPrice = () => {
-            contract.methods.price().call().then(res => {
+
+        const getPrice = async () => {
+            await contract.methods.price().call().then(res => {
                 this.nextPrice = res/10e14;
                 this.nextDate = new Date();
-
+    
                 this.lastMonthPrice = 0.001;
-
+    
                 // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
                 //     this.lastMonthPrice = this.nextPrice;
                 //     this.lastMonth = this.nextDate;
                 // }
-
+    
                 this.writePrices(res/10e18, this.nextDate);
             });
-            
         }
+        
+        setInterval(getPrice, 10000);
 
-        setInterval(getPrice, 2000); //2.628e6
+    }
+
+    updatePrice() {
+        contract.events.Price().on('data', (event) => {
+            console.log("Event happened:", event)
+
+            contract.methods.price().call().then(res => {
+                this.nextPrice = res/10e14;
+                this.nextDate = new Date();
+    
+                this.lastMonthPrice = 0.001;
+    
+                // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+                //     this.lastMonthPrice = this.nextPrice;
+                //     this.lastMonth = this.nextDate;
+                // }
+    
+                this.writePrices(res/10e18, this.nextDate);
+            });
+        });
     }
 }
 

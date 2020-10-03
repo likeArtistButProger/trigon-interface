@@ -49,6 +49,12 @@ class TopBar extends Component {
                  });
             });
 
+            this.ethereum.on('disconnect', accounts => {
+                this.setState({
+                    loggedIn: false
+                })
+            })
+
         }
     }
 
@@ -58,8 +64,33 @@ class TopBar extends Component {
         })
     }
 
-    logout = () => {
-        console.log(this.ethereum);
+    logout = async () => {
+        const walletAddress = await window.ethereum.request({
+            method: "eth_requestAccounts",
+            params: [
+              {
+                eth_accounts: {}
+              }
+            ]
+        });
+      
+        console.log(walletAddress);
+
+        // Runs only they are brand new, or have hit the disconnect button
+        if(walletAddress) {
+            const permissions = await window.ethereum.request({
+                method: "wallet_requestPermissions",
+                params: [
+                {
+                    eth_accounts: {}
+                }
+                ]
+            }).catch(err => {
+                this.setState({
+                    loggedIn: false
+                });
+            });
+        }
     }
 
     render () {
