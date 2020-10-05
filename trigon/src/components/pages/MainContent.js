@@ -59,7 +59,6 @@ class MainContent extends Component {
             for(let i = 0; i < chartPrices.length; i++) {
                 let itemDate = new Date(chartDates[i]).getTime(); //moment(chartDates[i]).format("MM:HH DD.MM.YYYY");
                 let itemPrice = parseFloat(chartPrices[i].toFixed(10));
-                console.log(itemPrice);
                 chart_data.push([itemDate, itemPrice]);
             }
 
@@ -70,10 +69,6 @@ class MainContent extends Component {
 
             return 0;
         })
-    }
-
-    componentWillMount() {
-        this.getChartData();
     }
 
     updateSize = () => {
@@ -209,36 +204,40 @@ class MainContent extends Component {
 
     getTransactionsHistory = () => {
         if(this.ethereum) {
-            console.log(this.ethereum.selectedAddress);
-            // const url = `https://api.etherscan.io/api?module=account&action=txlist&address=${this.ethereum.selectedAddress}&startblock=0&endblock=99999999&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`;
-            const url = `https://api.etherscan.io/api?module=account&action=txlistinternal&address=0x2c1ba59d6f58433fb1eaee7d20b26ed83bda51a3&startblock=0&endblock=2702578&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`
-            console.log("URL:", url);
+            const url = `https://ropsten.etherscan.io/api?module=account&action=tokentx&address=${this.ethereum.selectedAddress}&startblock=0&endblock=999999999&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`
             axios.get(url)
             .then(res => {
                 const data = res.data.result;
 
                 if(data.length === 0) return;
 
-                const clearData = data.map(transaction => {
+                // let clearData = data.filter(item => item.contarcAddres === trigon_new );
+
+                let clearData = data.map(transaction => {
                     return {
                         hash: transaction.hash,
                         value: parseFloat(transaction.value)/10e18,
-                        type: transaction.type
+                        timeStamp: transaction.timeStamp
                     }
                 });
 
                 let reducedClearData = [];
 
-                for(let i = 0; i < 10; i++) {
-                    reducedClearData.push(clearData[i])
+
+                if(clearData.length > 10) {
+                    for(let i = 0; i < 10; i++) {
+                        reducedClearData.push(clearData[i])
+                    }
+                } else {
+                    for(let i = 0; i < clearData.length; i++) {
+                        reducedClearData.push(clearData[i])
+                    }
                 }
+
 
                 this.setState({
                     transactions: reducedClearData
                 })
-
-                console.log("Clear data is:", clearData);
-
             }).catch(err => {
                 console.log(err);
             })
@@ -247,12 +246,6 @@ class MainContent extends Component {
 
     componentDidMount() {
         window.addEventListener('resize', this.updateSize);
-
-        this.getChartData().then(() => {
-            this.setState({
-            
-        });
-        }); 
 
         this.setState({
             chart_width: this.chartRect.getBoundingClientRect().width
@@ -272,10 +265,10 @@ class MainContent extends Component {
             await this.getPrice()
         })
         .then(async () => {
+            await this.updatePercents();
         })
         .then(async () => {
-            console.log(this.state);
-            await this.updatePercents();
+            await this.getChartData();
         });
 
         if(this.ethereum) {
@@ -284,6 +277,7 @@ class MainContent extends Component {
             this.ethereum.on('accountsChanged', (accounts) => {
                 this.getTrigonBalance();
                 this.getBalance();
+                this.getTransactionsHistory();
             })
         }
 
@@ -309,22 +303,23 @@ class MainContent extends Component {
                     totalSupply: totalSupply
                 });
     
+                await this.getBalance();
                 await this.getTrigonBalance();
                 await this.getEtheriumPrice();
                 await this.getTotalEthSupply();
                 await this.updatePercents();
                       this.getChartData();
+                      this.getTransactionsHistory();
             });
         })
         .on('error', console.error);
 
         contract.events.Transfer().on('data', async (event) => {
             this.getTrigonBalance();
+            this.getTransactionsHistory();
         }).on('error', (error) => {
             console.log(error);
         })
-
-        console.log(methods);
         // setInterval(this.getBalance, 1000);
     }
 
@@ -396,26 +391,18 @@ class MainContent extends Component {
                     </div>
                     <div className="flex flex-col justify-between pb-3 bg-trigon_gray-300 rounded-md row-start-3 md:row-start-2 md:col-start-2">
                         <div className="flex flex-row justify-between">
-                            <span className="mt-4 my-auto ml-4 flex flex-row text-xs">{this.state.buyPrice.toFixed(10)} ETH <p className="text-trigon_green text-xs my-auto ml-2">+{this.state.buyPercent}%</p></span>
+                            <span style={{whiteSpace: 'nowrap'}}  className="mt-4 my-auto ml-4 flex flex-row text-xs">{this.state.buyPrice.toFixed(10)} ETH <p style={{marginLeft: window.innerWidth >= 768 && window.innerWidth <= 790 ? '2px' : ''}} className="text-trigon_green text-xs my-auto ml-2">+{this.state.buyPercent}%</p></span>
                             <span onClick={() => {window.location.pathname = '/buy'}} className="text-sm mr-5 mt-3 md:mr-2 xl:mr-5 px-2 py-1 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">buy</span>
                         </div>
                     </div>
                     <div className="flex flex-col justify-between pb-3 bg-trigon_gray-300 rounded-md md:row-start-2 md:col-start-3">
                         <div className="flex flex-row justify-between">
-                            <span className="mt-4 my-auto ml-4 flex flex-row text-xs sm:text-md">{this.state.sellPrice.toFixed(10)} ETH <p className="text-trigon_green text-xs my-auto ml-2">+{this.state.sellPercent}%</p></span>
+                            <span style={{whiteSpace: 'nowrap'}} className="mt-4 my-auto ml-4 flex flex-row text-xs sm:text-md">{this.state.sellPrice.toFixed(10)} ETH <p style={{marginLeft: window.innerWidth >= 768 && window.innerWidth <= 790 ? '2px' : ''}} className="text-trigon_green text-xs my-auto ml-2">+{this.state.sellPercent}%</p></span>
                             <span onClick={() => {window.location.pathname = '/sell'}} className="text-sm mr-5 mt-3 px-2 py-1 md:mr-2 xl:mr-5 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">sell</span>
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 bg-trigon_gray-300 my-2 rounded-md md:w-11/12 md:mx-auto">
-                    {/* <div className="m-3">
-                        <h1 className="mb-2">History:</h1>
-                        {
-                            this.state.transactions.map(trans => {
-                                return <TransactionCard hash={trans.hash} type={trans.type} sum={trans.value} />
-                            })
-                        }
-                    </div> */}
+                <div className="grid grid-cols-1 md:grid-cols-2 bg-trigon_gray-300 my-2 rounded-md md:w-11/12 md:mx-auto">
                     <div ref={node => this.chartRect = node} className="m-3">
                       <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12">Trigon chart</h1>
                       <HighchartsReact
@@ -450,7 +437,7 @@ class MainContent extends Component {
             
                             title: {
                                 color: "#606166",
-                                text: "Trigon chart"
+                                text: "Sell Price"
                             },
 
                             legend: {
@@ -496,7 +483,7 @@ class MainContent extends Component {
             
                             yAxis: {
 
-                                labels: {
+                                 labels: {
                                     align: 'right',
                                     x: -3,
                                     format: '{value:.,0f}'
@@ -504,11 +491,42 @@ class MainContent extends Component {
                                 showFirstLabel: true,
                                 title: {
                                     color: "#606166",
-                                    text: "Prices"
+                                    text: ""
                                 }
                             }
                         }}/>
                       {/* <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width-30} height={370} chart_data={this.state.chart_data} />}</ParentSize> */}
+                    </div>
+                    <div className="m-3">
+                        <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12">History</h1>
+                        <div className="grid grid-cols-3 my-2 pl-2 rounded-md justify between">
+                                <div className="flex text-trigon_gray-100 md:text-xs lg:text-sm xl:text-md flex-row justify-start">
+                                    <span>
+                                        Tx Hash
+                                    </span>
+                                </div>
+                                <div className="flex text-trigon_gray-100 md:text-xs lg:text-sm xl:text-md flex-row justify-center">
+                                    <span>
+                                        Date
+                                    </span>
+                                </div>
+                                {
+                                    window.innerWidth >= 470 &&
+                                    <div className="flex text-trigon_gray-100 md:text-xs lg:text-sm xl:text-md flex-row justify-center">
+                                        <span>
+                                            Value
+                                        </span>
+                                    </div>
+                                }
+                        </div>
+                        <div className="grid grid-cols-1 gap-3 justify-between"> 
+                            
+                            {
+                                this.state.transactions.map(trans => {
+                                    return <TransactionCard hash={trans.hash} timeStamp={trans.timeStamp} sum={trans.value} key={trans.hash} />
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

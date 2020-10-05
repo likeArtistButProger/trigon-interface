@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import { abi } from './trigon_abi';
 import HDWalletProvider from '@truffle/hdwallet-provider';
 
-const HTTPProvider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/b2edf0df4af84cbca265c8a384f27db3');
+const HTTPProvider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/ad81060272384c98b3f60da6439aa355');
 
 export const provider = window.ethereum ? window.ethereum : HTTPProvider;
 

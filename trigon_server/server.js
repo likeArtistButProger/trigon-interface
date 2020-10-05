@@ -1,12 +1,15 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 const ChartHandler = require('./chartHandler');
 const fs = require('fs');
 
 ChartHandler.ChartHandler.readPrices();
-// ChartHandler.ChartHandler.getInitialPrice();
+
+if(ChartHandler.ChartHandler.chartPrices.length === 0)
+    ChartHandler.ChartHandler.getInitialPrice();
+
 ChartHandler.ChartHandler.startPriceTimer();
 
 app.use(express.static(path.resolve(__dirname, 'build')));

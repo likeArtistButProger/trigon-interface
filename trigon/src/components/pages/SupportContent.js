@@ -29,7 +29,6 @@ class SendContent extends Component {
                 const balance = await this.w3.eth.getBalance(address, (error, balance) => {
                     eth_balance = this.w3.fromWei(balance, "ether") + "";
                     eth_balance = parseFloat(eth_balance).toFixed(4);
-                    console.log("Eth balance:", eth_balance);
                     this.setState({
                         account_eth_balance: eth_balance
                     })

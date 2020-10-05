@@ -48,7 +48,6 @@ class SellContent extends Component {
                 const balance = await this.w3.eth.getBalance(address, (error, balance) => {
                     eth_balance = this.w3.fromWei(balance, "ether") + "";
                     eth_balance = parseFloat(eth_balance).toFixed(4);
-                    console.log("Eth balance:", eth_balance);
                     this.setState({
                         account_eth_balance: eth_balance
                     })
@@ -101,8 +100,6 @@ class SellContent extends Component {
 
         let trigon_balance = parseFloat(this.state.trigon_balance);
         let amount = parseFloat(this.state.amount); 
-
-        console.log(this.state.amount);
 
         if(isNaN(amount) || amount === 0) {
             alert("Please write correct amount of tokens");

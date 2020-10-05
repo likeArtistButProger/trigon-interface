@@ -105,7 +105,7 @@ class CompletedModal extends Component {
                         :   <p style={{"color": this.props.success ? '#7AC231' : '#C11E0F'}} >{this.props.success ? 'Transaction Successful!' : 'Transaction Failed'}</p>
                     }
                     <div className="buttons">
-                        <span onClick={this.toEtherscan} className="button">Tn Hash</span>
+                        <span onClick={this.toEtherscan} className="button">Tx Hash</span>
                         <span onClick={this.closeModal} className="button">Close</span>
                     </div>
                 </div>
