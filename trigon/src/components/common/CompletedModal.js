@@ -84,7 +84,7 @@ class CompletedModal extends Component {
 
     closeModal = () => {
         this.props.closeModal();
-        window.location.reload();
+        window.location.pathname = "/";
     }
     
     toEtherscan = () => {

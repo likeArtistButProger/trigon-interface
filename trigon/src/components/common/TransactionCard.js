@@ -1,6 +1,4 @@
-import { fromByteArray } from "plotly.js/dist/plotly-cartesian";
 import React, {Component} from 'react';
-import moment from 'moment';
 
 class TransactionCard extends Component {
     constructor(props) {
@@ -55,15 +53,19 @@ class TransactionCard extends Component {
         const toFixed = this.toFixed;
 
         return (
-            <div style={{padding: window.innerWidth >= 1280 ? "1px 5px" : ""}} className="grid grid-cols-3 md:py-1 pl-2 bg-trigon_gray-200 rounded-md justify between">
+            <div className="grid grid-cols-3 md:py-1 pl-2 bg-trigon_gray-200 rounded-md justify between">
                 <div className="flex flex-row justify-start">
-                    <a onClick={this.openTransaction} className="md:text-xs lg:text-md xl:text-base cursor-pointer hover:text-trigon_green">
-                        {this.props.hash.slice(0, 10)}...
+                    <a onClick={this.openTransaction} className="md:text-sm lg:text-md xl:text-base cursor-pointer hover:text-trigon_green">
+                        { window.innerWidth >= 831 
+                          ? window.innerWidth <= 1240 
+                          ? `${this.props.hash.slice(0, 20)}`
+                          : `${this.props.hash.slice(0, 35)}`
+                          : `${this.props.hash.slice(0, 10)}`}...
                     </a>
                 </div>
                 {
                     window.innerWidth >= 470 &&
-                    <div style={{fontSize: window.innerWidth >= 768 && window.innerWidth <= 980 ? '8px' : ''}} className="flex text-xs md:text-xs lg:text-xs xl:text-sm flex-row justify-center">
+                    <div className="flex text-xs md:text-sm lg:text-xs xl:text-sm flex-row justify-center">
                         <span>
                             {years !== '' && years}
                             {months !== '' && months}
@@ -74,14 +76,9 @@ class TransactionCard extends Component {
                         </span>
                     </div>
                 }
-                    <div style={{fontSize: window.innerWidth > 1400 ? "16px" : ""}} className="flex col-start-3 md:text-xs lg:text-md flex-row justify-center">
+                    <div className="flex col-start-3 md:text-sm lg:text-md flex-row justify-center">
                         <span>
-                            {   window.innerWidth > 1160 
-                                ? this.props.sum 
-                                : window.innerWidth > 580
-                                ? toFixed(this.props.sum, 10) 
-                                : toFixed(this.props.sum, 7)
-                            }
+                            {this.props.sum} &nbsp; TRGN
                         </span>
                     </div>
             </div>

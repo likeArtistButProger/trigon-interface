@@ -154,7 +154,7 @@ class BuyContent extends Component {
         methods.isInitialize().call().then(async (res) => {
 
             if(res) {
-                minPrice = (1.0 / this.state.usd_price) * 50;
+                minPrice = (1.0 / this.state.usd_price) * 3;
 
                 if(this.state.calculatedPrice < minPrice) {
                     alert(`Minimal buy amount should be more than ${minPrice} ETH`)

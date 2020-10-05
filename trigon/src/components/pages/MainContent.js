@@ -1,19 +1,14 @@
 import React, {Component} from 'react';
 import TopBar from '../common/TopBar';
 import axios from 'axios';
-import moment from 'moment';
 
 import '../../styles/maincontent.css';
 import TrigonImage from '../../assets/trigon_coin.png';
-import Chart from '../common/NewChart';
-import TransactionCard from '../common/TransactionCard';
-import ParentSize from '@visx/responsive/lib/components/ParentSize';
 
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-import { trigon_new, contract, methods } from '../../trigon_interface/interface';
-import NewChart from '../common/NewChart';
+import { contract, methods } from '../../trigon_interface/interface';
 
 import '../../styles/chart.css';
 
@@ -202,48 +197,6 @@ class MainContent extends Component {
         });
     }
 
-    getTransactionsHistory = () => {
-        if(this.ethereum) {
-            const url = `https://ropsten.etherscan.io/api?module=account&action=tokentx&address=${this.ethereum.selectedAddress}&startblock=0&endblock=999999999&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`
-            axios.get(url)
-            .then(res => {
-                const data = res.data.result;
-
-                if(data.length === 0) return;
-
-                // let clearData = data.filter(item => item.contarcAddres === trigon_new );
-
-                let clearData = data.map(transaction => {
-                    return {
-                        hash: transaction.hash,
-                        value: parseFloat(transaction.value)/10e18,
-                        timeStamp: transaction.timeStamp
-                    }
-                });
-
-                let reducedClearData = [];
-
-
-                if(clearData.length > 10) {
-                    for(let i = 0; i < 10; i++) {
-                        reducedClearData.push(clearData[i])
-                    }
-                } else {
-                    for(let i = 0; i < clearData.length; i++) {
-                        reducedClearData.push(clearData[i])
-                    }
-                }
-
-
-                this.setState({
-                    transactions: reducedClearData
-                })
-            }).catch(err => {
-                console.log(err);
-            })
-        }    
-    }
-
     componentDidMount() {
         window.addEventListener('resize', this.updateSize);
 
@@ -256,7 +209,6 @@ class MainContent extends Component {
         this.getTotalSupply();
         this.getTotalEthSupply();
         this.getEtheriumPrice();
-        this.getTransactionsHistory();
         this.getBuyCommission()
         .then(async () => {
             await this.getSellComission()
@@ -265,11 +217,11 @@ class MainContent extends Component {
             await this.getPrice()
         })
         .then(async () => {
-            await this.updatePercents();
-        })
-        .then(async () => {
             await this.getChartData();
+        }).then(async () => {
+            await this.updatePercents();
         });
+
 
         if(this.ethereum) {
             this.w3.setProvider(this.ethereum);
@@ -277,7 +229,6 @@ class MainContent extends Component {
             this.ethereum.on('accountsChanged', (accounts) => {
                 this.getTrigonBalance();
                 this.getBalance();
-                this.getTransactionsHistory();
             })
         }
 
@@ -309,7 +260,6 @@ class MainContent extends Component {
                 await this.getTotalEthSupply();
                 await this.updatePercents();
                       this.getChartData();
-                      this.getTransactionsHistory();
             });
         })
         .on('error', console.error);
@@ -402,7 +352,7 @@ class MainContent extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 bg-trigon_gray-300 my-2 rounded-md md:w-11/12 md:mx-auto">
+                <div className="grid grid-cols-1 bg-trigon_gray-300 my-2 rounded-md md:w-11/12 md:mx-auto">
                     <div ref={node => this.chartRect = node} className="m-3">
                       <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12">Trigon chart</h1>
                       <HighchartsReact
@@ -496,37 +446,6 @@ class MainContent extends Component {
                             }
                         }}/>
                       {/* <ParentSize>{({ width, height }) => <NewChart width={this.state.chart_width-30} height={370} chart_data={this.state.chart_data} />}</ParentSize> */}
-                    </div>
-                    <div className="m-3">
-                        <h1 className="text-xl xl:text-3xl mb-3 md:w-11/12">History</h1>
-                        <div className="grid grid-cols-3 my-2 pl-2 rounded-md justify between">
-                                <div className="flex text-trigon_gray-100 md:text-xs lg:text-sm xl:text-md flex-row justify-start">
-                                    <span>
-                                        Tx Hash
-                                    </span>
-                                </div>
-                                <div className="flex text-trigon_gray-100 md:text-xs lg:text-sm xl:text-md flex-row justify-center">
-                                    <span>
-                                        Date
-                                    </span>
-                                </div>
-                                {
-                                    window.innerWidth >= 470 &&
-                                    <div className="flex text-trigon_gray-100 md:text-xs lg:text-sm xl:text-md flex-row justify-center">
-                                        <span>
-                                            Value
-                                        </span>
-                                    </div>
-                                }
-                        </div>
-                        <div className="grid grid-cols-1 gap-3 justify-between"> 
-                            
-                            {
-                                this.state.transactions.map(trans => {
-                                    return <TransactionCard hash={trans.hash} timeStamp={trans.timeStamp} sum={trans.value} key={trans.hash} />
-                                })
-                            }
-                        </div>
                     </div>
                 </div>
             </div>

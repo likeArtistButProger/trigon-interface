@@ -84,11 +84,10 @@ class SendContent extends Component {
 
         contract.events.Transfer().on('data', async (event) => {
             this.getTrigonBalance();
+            this.getBalance();
         }).on('error', (error) => {
             console.log(error);
         })
-
-        setInterval(this.getBalance, 1000);
     }
 
     sendTokens = async () => {

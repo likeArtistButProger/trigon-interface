@@ -6,6 +6,7 @@ import Main from './components/pages/Main';
 import ReferalsComponent from './components/pages/ReferalsComponent';
 import SellComponent from './components/pages/SellComponent';
 import SendComponent from './components/pages/SendComponent';
+import Transactions from './components/pages/Transactions';
 import Support from './components/pages/Support';
 
 import './trigon_interface/interface';
@@ -21,6 +22,7 @@ function App() {
         <Route exact path="/buy" component={BuyComponent}/>
         <Route exact path="/sell" component={SellComponent}/>
         <Route exact path="/send" component={SendComponent}/>
+        <Route exact path="/txs" component={Transactions}/>
         <Route exact path="/referral" component={ReferalsComponent}/>
         <Route exact path="/faq" component={Support}/>
       </Switch>

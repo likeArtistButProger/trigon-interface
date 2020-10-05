@@ -71,7 +71,14 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a href='/referral' className="row-start-7">
+                <a href='/txs' className="row-start-7">
+                    <div className={`w-full h-full `.concat(this.state.active_tab === 6 ? "active" : "")}>
+                        <svg className='h-full mx-auto' fill="#979797" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                            <path d="M24 12c0 6.627-5.373 12-12 12s-12-5.373-12-12h2c0 5.514 4.486 10 10 10s10-4.486 10-10-4.486-10-10-10c-2.777 0-5.287 1.141-7.099 2.977l2.061 2.061-6.962 1.354 1.305-7.013 2.179 2.18c2.172-2.196 5.182-3.559 8.516-3.559 6.627 0 12 5.373 12 12zm-13-6v8h7v-2h-5v-6h-2z"/>
+                        </svg>
+                    </div>
+                </a>
+                <a style={{gridRowStart: '8'}} href='/referral'>
                     <div className={`w-full h-full `.concat(this.state.active_tab === 4 ? "active" : "")}>
                         <svg className="h-full mx-auto" xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 50 48">
                         <g id="Layer_2" data-name="Layer 2">
@@ -85,7 +92,7 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a style={{gridRowStart: '8'}} href="/faq">
+                <a style={{gridRowStart: '9'}} href="/faq">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 5 ? "active" : "")}>
                         <svg className="h-full mx-auto pl-1 mb-1" width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M26 18H24V27H11V29C11 29.55 11.45 30 12 30H23L27 34V19C27 18.45 26.55 18 26 18ZM22 24V15C22 14.45 21.55 14 21 14H8C7.45 14 7 14.45 7 15V29L11 25H21C21.55 25 22 24.55 22 24Z" fill="#979797"/>
@@ -95,7 +102,7 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <div id="social" className="grid grid-rows-4 gap-8">
+                <div id="social" className="grid grid-rows-4 mt-5 gap-8">
                     <div>
                         <a onClick={() => window.open('https://t.me/trigonplus')}>
                             {/* <svg id="telegram" className="mx-auto" fill="#979797" width="24px" height="24px" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" space="preserve" serif="http://www.serif.com/" style={{fillRule: 'evenodd', clipRule: 'evenodd', strokelineJoin: 'round', strokeMiterlimit: 1.41421}}><path id="telegram-5" d="M12,0c-6.627,0 -12,5.373 -12,12c0,6.627 5.373,12 12,12c6.627,0 12,-5.373 12,-12c0,-6.627 -5.373,-12 -12,-12Zm0,2c5.514,0 10,4.486 10,10c0,5.514 -4.486,10 -10,10c-5.514,0 -10,-4.486 -10,-10c0,-5.514 4.486,-10 10,-10Zm2.692,14.889c0.161,0.115 0.368,0.143 0.553,0.073c0.185,-0.07 0.322,-0.228 0.362,-0.42c0.435,-2.042 1.489,-7.211 1.884,-9.068c0.03,-0.14 -0.019,-0.285 -0.129,-0.379c-0.11,-0.093 -0.263,-0.12 -0.399,-0.07c-2.096,0.776 -8.553,3.198 -11.192,4.175c-0.168,0.062 -0.277,0.223 -0.271,0.4c0.006,0.177 0.125,0.33 0.296,0.381c1.184,0.354 2.738,0.847 2.738,0.847c0,0 0.725,2.193 1.104,3.308c0.047,0.139 0.157,0.25 0.301,0.287c0.145,0.038 0.298,-0.001 0.406,-0.103c0.608,-0.574 1.548,-1.461 1.548,-1.461c0,0 1.786,1.309 2.799,2.03Zm-5.505,-4.338l0.84,2.769l0.186,-1.754c0,0 3.243,-2.925 5.092,-4.593c0.055,-0.048 0.062,-0.13 0.017,-0.188c-0.045,-0.057 -0.126,-0.071 -0.188,-0.032c-2.143,1.368 -5.947,3.798 -5.947,3.798Z"/></svg> */}
