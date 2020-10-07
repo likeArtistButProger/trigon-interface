@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
-import Logo from '../../assets/logo.png';
-
 import TopBar from './TopBar';
 
 const MenuBtn = styled.div`
@@ -51,25 +49,25 @@ class MobileNavigaition extends Component {
                             <span className="absolute top-0 right-0 mr-3 mt-3 text-3xl" onClick={this.switchModal}>X</span>
                             <ul className="mt-20 text-center">
                                 <li className="my-8 text-2xl">
-                                    <a href="/">Dashboard</a>
+                                    <a href="/wallet/">Dashboard</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/buy">Buy TRGN</a>
+                                    <a href="/wallet/buy">Buy TRGN</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/sell">Sell TRGN</a>
+                                    <a href="/wallet/sell">Sell TRGN</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/send">Send TRGN</a>
+                                    <a href="/wallet/send">Send TRGN</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/txs">Transcations</a>
+                                    <a href="/wallet/txs">Transcations</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/referral">Referrals</a>
+                                    <a href="/wallet/referral">Referrals</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/faq">FAQ</a>
+                                    <a href="/wallet/faq">FAQ</a>
                                 </li>
                                 <li className="mt-12">
                                     <div id="social" className="w-2/3 mx-auto my-auto pl-4 grid grid-cols-4 gap-2">
@@ -102,7 +100,7 @@ class MobileNavigaition extends Component {
 
                     <div className="w-8 h-8 mt-2 ml-2 col-start-1">
                         <a href="http://trigon.plus/">
-                            <img src={Logo} alt=""/>
+                            <img src='../../assets/logo.png' alt=""/>
                         </a>
                     </div>
                     <div className="flex justify-end mr-3 flex-row col-start-6">

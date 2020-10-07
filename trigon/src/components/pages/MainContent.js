@@ -3,7 +3,6 @@ import TopBar from '../common/TopBar';
 import axios from 'axios';
 
 import '../../styles/maincontent.css';
-import TrigonImage from '../../assets/trigon_coin.png';
 
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
@@ -270,7 +269,6 @@ class MainContent extends Component {
         }).on('error', (error) => {
             console.log(error);
         })
-        // setInterval(this.getBalance, 1000);
     }
 
     componentWillUnmount() {
@@ -312,7 +310,7 @@ class MainContent extends Component {
                                     Total TRGN Supply
                                 </span>
                                 <div style={{backgroundColor: "rgba(0, 0, 0, 0.3)"}} className="w-10 h-10 mr-3 rounded-md">
-                                    <img src={TrigonImage} alt="Trigon"/>
+                                    <img src='trigon_coin.png' alt="Trigon"/>
                                 </div>
                             </div>
                             <div className="flex flex-row md:mt-8 lg:mt-0">

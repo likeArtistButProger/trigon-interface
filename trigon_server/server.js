@@ -17,7 +17,7 @@ ChartHandler.ChartHandler.startPriceTimer();
 
 app.use(express.static(path.resolve(__dirname, 'wallet')));
 
-app.get('/api/chart', (req, res) => {
+app.get('/wallet/api/chart', (req, res) => {
     fs.readFile('./prices.json', 'utf-8', (err, data) => {
         if(data.length !== 0) {
             let newData = JSON.parse(data);
@@ -26,7 +26,7 @@ app.get('/api/chart', (req, res) => {
     });
 });
 
-app.get('/api/getPrices', async (req, res) => {
+app.get('/wallet/api/getPrices', async (req, res) => {
     let prices = await priceAPI.getPrices(ChartHandler.ChartHandler.lastMonthPrice);
     res.json(prices);
 });

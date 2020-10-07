@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 
 import '../../styles/topbar.css';
-import MetamaskLogo from '../../assets/metamask_logo.png';
 
 class TopBar extends Component {
     constructor(props) {
@@ -132,7 +131,7 @@ class TopBar extends Component {
                     !loggedIn && 
                     <div className="relative">
                         <div onClick={this.switchModal} id="login" className="px-3 py-3 my-auto border-2 border-trigon_gray-300 rounded-lg cursor-pointer">
-                            <img className="w-4 h-4" src={MetamaskLogo} alt="Metamask"/>
+                            <img className="w-4 h-4" src='metamask_logo.png' alt="Metamask"/>
                         </div>
                         {
                             this.state.show_login_modal &&

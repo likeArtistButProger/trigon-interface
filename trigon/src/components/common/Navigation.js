@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-import Logo from '../../assets/logo.png';
 import '../../styles/navigation.css';
 
 class Navigation extends Component {
@@ -24,17 +23,17 @@ class Navigation extends Component {
             <div id="navigation" style={{background: "#43444B"}} className="hidden md:grid grid-cols-1 w-20 h-screen bg-trigon_gray-100">
                 <a href="http://trigon.plus">
                     <div className="w-12 h-12 mx-auto mt-5">
-                        <img style={{outline: "none"}} className="w-full h-full" src={Logo} alt="Logo" />
+                        <img style={{outline: "none"}} className="w-full h-full" src='logo.png' alt="Logo" />
                     </div>
                 </a>
-                <a href='/' className="row-start-3">
+                <a href='/wallet/' className="row-start-3">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 0 ? "active" : "")}>
                         <svg className="h-full mx-auto my-auto" width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M1.89956 0.0671387C1.32518 0.0671387 0.859558 0.532763 0.859558 1.10714V8.71366H7.30906V0.0671387H1.89956ZM15.0196 0.0671387H9.61005V5.26714H16.0596V1.10714C16.0596 0.532763 15.5939 0.0671387 15.0196 0.0671387ZM0.859558 10.5773H7.30906V15.7773H1.89956C1.32518 15.7773 0.859558 15.3117 0.859558 14.7373V10.5773ZM16.0596 7.13081H9.61005V15.7773H15.0196C15.5939 15.7773 16.0596 15.3117 16.0596 14.7373V7.13081Z" fill="#979797"/>
                         </svg>
                     </div>
                 </a>
-                <a href='/buy' className="row-start-4">
+                <a href='/wallet/buy' className="row-start-4">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 1 ? "active" : "")}>
                         <svg className="h-full mx-auto" xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 50 47.56">
                             <g>
@@ -46,7 +45,7 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a href='/sell' className="row-start-5">
+                <a href='/wallet/sell' className="row-start-5">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 2 ? "active" : "")}>
                         <svg className="h-full mx-auto" xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 50 47.56">
                             <g>
@@ -58,7 +57,7 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a href='/send' className="row-start-6">
+                <a href='/wallet/send' className="row-start-6">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 3 ? "active" : "")}>
                         <svg className='h-full mx-auto' xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 50 48">
                             <g>
@@ -71,14 +70,14 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a href='/txs' className="row-start-7">
+                <a href='/wallet/txs' className="row-start-7">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 6 ? "active" : "")}>
                         <svg className='h-full mx-auto' fill="#979797" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
                             <path d="M24 12c0 6.627-5.373 12-12 12s-12-5.373-12-12h2c0 5.514 4.486 10 10 10s10-4.486 10-10-4.486-10-10-10c-2.777 0-5.287 1.141-7.099 2.977l2.061 2.061-6.962 1.354 1.305-7.013 2.179 2.18c2.172-2.196 5.182-3.559 8.516-3.559 6.627 0 12 5.373 12 12zm-13-6v8h7v-2h-5v-6h-2z"/>
                         </svg>
                     </div>
                 </a>
-                <a style={{gridRowStart: '8'}} href='/referral'>
+                <a style={{gridRowStart: '8'}} href='/wallet/referral'>
                     <div className={`w-full h-full `.concat(this.state.active_tab === 4 ? "active" : "")}>
                         <svg className="h-full mx-auto" xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 50 48">
                         <g id="Layer_2" data-name="Layer 2">
@@ -92,7 +91,7 @@ class Navigation extends Component {
                         </svg>
                     </div>
                 </a>
-                <a style={{gridRowStart: '9'}} href="/faq">
+                <a style={{gridRowStart: '9'}} href="/wallet/faq">
                     <div className={`w-full h-full `.concat(this.state.active_tab === 5 ? "active" : "")}>
                         <svg className="h-full mx-auto pl-1 mb-1" width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" d="M26 18H24V27H11V29C11 29.55 11.45 30 12 30H23L27 34V19C27 18.45 26.55 18 26 18ZM22 24V15C22 14.45 21.55 14 21 14H8C7.45 14 7 14.45 7 15V29L11 25H21C21.55 25 22 24.55 22 24Z" fill="#979797"/>
