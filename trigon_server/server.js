@@ -15,7 +15,7 @@ ChartHandler.ChartHandler.startPriceTimer();
 
 
 
-app.use(express.static(path.resolve(__dirname, 'build')));
+app.use(express.static(path.resolve(__dirname, 'wallet', 'build')));
 
 app.get('/api/chart', (req, res) => {
     fs.readFile('./prices.json', 'utf-8', (err, data) => {
@@ -33,7 +33,7 @@ app.get('/api/getPrices', async (req, res) => {
 
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'wallet', 'build', 'index.html'));
 })
 
 app.listen(port, () => {
