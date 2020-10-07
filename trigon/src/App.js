@@ -18,13 +18,13 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/wallet/" component={Main}/>
-        <Route exact path="/wallet/buy" component={BuyComponent}/>
-        <Route exact path="/wallet/sell" component={SellComponent}/>
-        <Route exact path="/wallet/send" component={SendComponent}/>
-        <Route exact path="/wallet/txs" component={Transactions}/>
-        <Route exact path="/wallet/referral" component={ReferalsComponent}/>
-        <Route exact path="/wallet/faq" component={Support}/>
+        <Route exact path="/" component={Main}/>
+        <Route exact path="/buy" component={BuyComponent}/>
+        <Route exact path="/sell" component={SellComponent}/>
+        <Route exact path="/send" component={SendComponent}/>
+        <Route exact path="/txs" component={Transactions}/>
+        <Route exact path="/referral" component={ReferalsComponent}/>
+        <Route exact path="/faq" component={Support}/>
       </Switch>
     </BrowserRouter>
   );
