@@ -47,8 +47,6 @@ class SendContent extends Component {
                 this.getBalance();
             })
         }
-
-        setInterval(this.getBalance, 1000);
     }
 
     render() {
@@ -99,7 +97,7 @@ class SendContent extends Component {
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>Do you have referral program?</h2>
-                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Yes, invite others to buy TRGN tokens and earn 5% from the amount of tokens they acquired. The referral link can be found by clicking the Referral tab in the menu.</div>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Yes, invite others to buy TRGN token and earn 5% from the amount of tokens they acquired. The referral link can be found by clicking the Referral tab in the menu. Note: To activate your referral link, you must have Trigon tokens in your balance (min buy $50 worth Ethereum)</div>
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>Why do i see a notice about the possible price change?</h2>

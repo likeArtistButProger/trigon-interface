@@ -63,6 +63,9 @@ class MobileNavigaition extends Component {
                                     <a href="/send">Send TRGN</a>
                                 </li>
                                 <li className="my-8 text-2xl">
+                                    <a href="/txs">Transcations</a>
+                                </li>
+                                <li className="my-8 text-2xl">
                                     <a href="/referral">Referrals</a>
                                 </li>
                                 <li className="my-8 text-2xl">

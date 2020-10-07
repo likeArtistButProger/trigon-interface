@@ -1,7 +1,5 @@
 const contract = require('./trigon_interface/interface');
 const fs = require('fs');
-const moment = require('moment');
-const { relativeTimeThreshold } = require('moment');
 
 class ChartHandler {
     constructor() {

@@ -73,7 +73,7 @@ class BuyContent extends Component {
     }
 
     getBasePrice = async () => {
-        methods.price().call().then(res => {
+        await methods.price().call().then(res => {
             let price = res/10e17;
 
             this.setState({
@@ -154,7 +154,7 @@ class BuyContent extends Component {
         methods.isInitialize().call().then(async (res) => {
 
             if(res) {
-                minPrice = (1.0 / this.state.usd_price) * 3;
+                minPrice = (1.0 / this.state.usd_price) * 50;
 
                 if(this.state.calculatedPrice < minPrice) {
                     alert(`Minimal buy amount should be more than ${minPrice} ETH`)
@@ -222,9 +222,12 @@ class BuyContent extends Component {
 
         const address = this.getCookie('trigon');
 
+
         this.setState({
             provided_address: address ? address : owner_address
         });
+
+        // this.buyInput.focus()
 
         if(this.ethereum) {
             this.w3.setProvider(this.ethereum);
@@ -255,6 +258,7 @@ class BuyContent extends Component {
     }
 
     render() {
+
         return(
             <div className="flex flex-col w-11/12 md:w-11/12 mx-auto md:mt-2 md:mt-2 md:mx-0 md:ml-1 md:mr-5">
                 {
@@ -282,7 +286,7 @@ class BuyContent extends Component {
                                     <p className="text-md">ETH to pay {(this.state.calculatedPrice).toFixed(8)}</p>
                             }
                         </div>
-                        <input value={this.state.tokenAmount} onChange={(e) => this.calculatePrice(e)} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
+                        <input ref={node => this.buyInput = node} value={this.state.tokenAmount} onChange={(e) => this.calculatePrice(e)} ref={node => this.amount = node} type="number" className="bg-trigon_gray-100 rounded-lg pl-3 outline-none py-2 text-lg" placeholder="Enter TRGN amount" name="buy" id='buy' required />
                     </div>
                     <div className="flex flex-col pt-5 pb-3 w-11/12 mx-auto">
                         <label htmlFor="referrer" className="mb-2">Referrer address</label>

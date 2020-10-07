@@ -98,8 +98,6 @@ class TransactionContent extends Component {
                 this.getTransactionsHistory();
             })
         }
-
-        setInterval(this.getBalance, 1000);
     }
 
     render() {

@@ -4,6 +4,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 const ChartHandler = require('./chartHandler');
 const fs = require('fs');
+const priceAPI = require('./priceApi');
 
 ChartHandler.ChartHandler.readPrices();
 
@@ -11,6 +12,8 @@ if(ChartHandler.ChartHandler.chartPrices.length === 0)
     ChartHandler.ChartHandler.getInitialPrice();
 
 ChartHandler.ChartHandler.startPriceTimer();
+
+
 
 app.use(express.static(path.resolve(__dirname, 'build')));
 
@@ -21,7 +24,12 @@ app.get('/api/chart', (req, res) => {
             res.json(newData);
         }
     });
-})
+});
+
+app.get('/api/getPrices', async (req, res) => {
+    let prices = await priceAPI.getPrices(ChartHandler.ChartHandler.lastMonthPrice);
+    res.json(prices);
+});
 
 
 app.get('*', (req, res) => {
