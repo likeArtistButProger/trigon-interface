@@ -47,9 +47,7 @@ module.exports.getPrices = async function getPrices(start_price) {
 
     const tokenPriceInUSD = sellPrice * ethPriceInUSD;
 
-
     start_price = parseFloat(start_price);
-
 
     let lastSell = (1 - sellCommission) * start_price;
     let lastBuy = (start_price * (1 + admin_commission + ref_commission)) / (1 - growth_commission);

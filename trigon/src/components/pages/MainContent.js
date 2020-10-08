@@ -265,6 +265,7 @@ class MainContent extends Component {
 
         contract.events.Transfer().on('data', async (event) => {
             this.getTrigonBalance();
+            this.getTransactionsHistory();
         }).on('error', (error) => {
             console.log(error);
         })
