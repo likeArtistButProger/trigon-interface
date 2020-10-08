@@ -44,7 +44,7 @@ class MainContent extends Component {
     }
 
     getChartData = async () => {
-        await axios.get('/api/chart').then(res => {
+        await axios.get('/wallet/api/chart').then(res => {
             const chartPrices = res.data.prices;
             const chartDates = res.data.dates;
 
@@ -265,7 +265,6 @@ class MainContent extends Component {
 
         contract.events.Transfer().on('data', async (event) => {
             this.getTrigonBalance();
-            this.getTransactionsHistory();
         }).on('error', (error) => {
             console.log(error);
         })
@@ -340,13 +339,13 @@ class MainContent extends Component {
                     <div className="flex flex-col justify-between pb-3 bg-trigon_gray-300 rounded-md row-start-3 md:row-start-2 md:col-start-2">
                         <div className="flex flex-row justify-between">
                             <span style={{whiteSpace: 'nowrap'}}  className="mt-4 my-auto ml-4 flex flex-row text-xs">{this.state.buyPrice.toFixed(10)} ETH <p style={{marginLeft: window.innerWidth >= 768 && window.innerWidth <= 790 ? '2px' : ''}} className="text-trigon_green text-xs my-auto ml-2">+{this.state.buyPercent}%</p></span>
-                            <span onClick={() => {window.location.pathname = '/buy'}} className="text-sm mr-5 mt-3 md:mr-2 xl:mr-5 px-2 py-1 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">buy</span>
+                            <span onClick={() => {window.location.pathname = '/wallet/buy'}} className="text-sm mr-5 mt-3 md:mr-2 xl:mr-5 px-2 py-1 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">buy</span>
                         </div>
                     </div>
                     <div className="flex flex-col justify-between pb-3 bg-trigon_gray-300 rounded-md md:row-start-2 md:col-start-3">
                         <div className="flex flex-row justify-between">
                             <span style={{whiteSpace: 'nowrap'}} className="mt-4 my-auto ml-4 flex flex-row text-xs sm:text-md">{this.state.sellPrice.toFixed(10)} ETH <p style={{marginLeft: window.innerWidth >= 768 && window.innerWidth <= 790 ? '2px' : ''}} className="text-trigon_green text-xs my-auto ml-2">+{this.state.sellPercent}%</p></span>
-                            <span onClick={() => {window.location.pathname = '/sell'}} className="text-sm mr-5 mt-3 px-2 py-1 md:mr-2 xl:mr-5 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">sell</span>
+                            <span onClick={() => {window.location.pathname = '/wallet/sell'}} className="text-sm mr-5 mt-3 px-2 py-1 md:mr-2 xl:mr-5 border-2 border-trigon_green rounded-full hover:text-trigon_green cursor-pointer">sell</span>
                         </div>
                     </div>
                 </div>

@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.b90bb492.chunk.css",
-    "main.js": "/static/js/main.d0208508.chunk.js",
-    "main.js.map": "/static/js/main.d0208508.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.d49e0e4b.js",
-    "runtime-main.js.map": "/static/js/runtime-main.d49e0e4b.js.map",
-    "static/js/2.aa6ca3b6.chunk.js": "/static/js/2.aa6ca3b6.chunk.js",
-    "static/js/2.aa6ca3b6.chunk.js.map": "/static/js/2.aa6ca3b6.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.993838652a08317028851df9431d7c5a.js": "/precache-manifest.993838652a08317028851df9431d7c5a.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.b90bb492.chunk.css.map": "/static/css/main.b90bb492.chunk.css.map",
-    "static/js/2.aa6ca3b6.chunk.js.LICENSE.txt": "/static/js/2.aa6ca3b6.chunk.js.LICENSE.txt"
+    "wallet/main.css": "/static/css/main.b90bb492.chunk.css",
+    "wallet/main.js": "/static/js/main.553bdbf2.chunk.js",
+    "wallet/main.js.map": "/static/js/main.553bdbf2.chunk.js.map",
+    "wallet/runtime-main.js": "/static/js/runtime-main.d49e0e4b.js",
+    "wallet/runtime-main.js.map": "/static/js/runtime-main.d49e0e4b.js.map",
+    "wallet/static/js/2.aa6ca3b6.chunk.js": "/static/js/2.aa6ca3b6.chunk.js",
+    "wallet/static/js/2.aa6ca3b6.chunk.js.map": "/static/js/2.aa6ca3b6.chunk.js.map",
+    "wallet/index.html": "/index.html",
+    "wallet/precache-manifest.eb0e8a893324cff29d039c425414a4a8.js": "/precache-manifest.eb0e8a893324cff29d039c425414a4a8.js",
+    "wallet/service-worker.js": "/service-worker.js",
+    "wallet/static/css/main.b90bb492.chunk.css.map": "/static/css/main.b90bb492.chunk.css.map",
+    "wallet/static/js/2.aa6ca3b6.chunk.js.LICENSE.txt": "/static/js/2.aa6ca3b6.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.d49e0e4b.js",
-    "static/js/2.aa6ca3b6.chunk.js",
-    "static/css/main.b90bb492.chunk.css",
-    "static/js/main.d0208508.chunk.js"
+    "wallet/static/js/runtime-main.d49e0e4b.js",
+    "wallet/static/js/2.aa6ca3b6.chunk.js",
+    "wallet/static/css/main.b90bb492.chunk.css",
+    "wallet/static/js/main.553bdbf2.chunk.js"
   ]
 }

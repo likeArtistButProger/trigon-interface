@@ -61,7 +61,7 @@ class MobileNavigaition extends Component {
                                     <a href="/wallet/send">Send TRGN</a>
                                 </li>
                                 <li className="my-8 text-2xl">
-                                    <a href="/wallet/txs">Transcations</a>
+                                    <a href="/wallet/txs">Transactions</a>
                                 </li>
                                 <li className="my-8 text-2xl">
                                     <a href="/wallet/referral">Referrals</a>
@@ -100,7 +100,7 @@ class MobileNavigaition extends Component {
 
                     <div className="w-8 h-8 mt-2 ml-2 col-start-1">
                         <a href="http://trigon.plus/">
-                            <img src='../../assets/logo.png' alt=""/>
+                            <img src='logo.png' alt=""/>
                         </a>
                     </div>
                     <div className="flex justify-end mr-3 flex-row col-start-6">

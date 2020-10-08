@@ -91,8 +91,27 @@ class ChartHandler {
             });
         }
 
-        setInterval(getPrice, 3.6e+6);
+        setInterval(getPrice, 1,8e+6);
 
+    }
+
+    async getPrice () {
+        await contract.methods.price().call().then(res => {
+            this.getSellCommission().then(() => {
+                this.nextPrice = (1 - this.sellCommission) * (res/10e17);
+                this.nextDate = new Date();
+    
+                this.lastMonthPrice = (1 - this.sellCommission) * 0.001;
+    
+                // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
+                //     this.lastMonthPrice = this.nextPrice;
+                //     this.lastMonth = this.nextDate;
+                // }
+    
+                this.writePrices(this.nextPrice, this.nextDate);
+            });
+
+        });
     }
 
     updatePrice() {

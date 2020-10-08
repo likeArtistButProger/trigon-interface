@@ -5,6 +5,7 @@ const port = process.env.PORT || 4000;
 const ChartHandler = require('./chartHandler');
 const fs = require('fs');
 const priceAPI = require('./priceApi');
+const contract = require('./trigon_interface/interface');
 
 ChartHandler.ChartHandler.readPrices();
 
@@ -12,8 +13,6 @@ if(ChartHandler.ChartHandler.chartPrices.length === 0)
     ChartHandler.ChartHandler.getInitialPrice();
 
 ChartHandler.ChartHandler.startPriceTimer();
-
-
 
 app.use(express.static(path.resolve(__dirname, 'wallet')));
 
@@ -38,4 +37,10 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
     console.log('Listening on port', port);
+
+    // contract.events.allEvents().on('data', function(event) {
+    //     console.log("Event happened");
+    //     console.log(event);
+    //     ChartHandler.ChartHandler.getPrice();
+    // });
 })
