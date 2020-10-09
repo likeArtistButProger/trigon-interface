@@ -85,7 +85,7 @@ class SendContent extends Component {
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>Why the team is anon?</h2>
-                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Because there is no team as such. We are a group of crypto investors who are tired of rug pulls and losing money on crapy projects, where the money are earned only by scammers and whales. Therefore, we decided to hire blockchain devs and create a token that will give everyone an equall and fair opportunity to earn money. So welcome to the crypto community owned project!</div>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Because there is none. We are a group of crypto investors who are tired of rug pulls and losing money on crapy projects, where the money is earned only by scammers and whales. Therefore, we decided to hire blockchain devs and create a token that will give everyone an equall and fair opportunity to earn money. So welcome to the crypto community owned project!</div>
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>How to buy TRGN token?</h2>
@@ -94,6 +94,10 @@ class SendContent extends Component {
                         <div className="mt-3 mb-6">
                             <h2>How to sell TRGN token?</h2>
                             <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">To sell TRGN tokens, connect to the Trigon wallet through Metamask, click the sell tab in the menu, specify the number of tokens you want to sell and click the Sell button. After you send tokens to the smart contract, it will send ether to your address.</div>
+                        </div>
+                        <div className="mt-3 mb-6">
+                            <h2>Why don't I see my TRGN tokens in the Metamask?</h2>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">To see your TRGN tokens in Metamask wallet, you have to add it there. Click Assets tab, then Add token, choose User token and paste Trigon smart contract address 0x5CecE14b95578285EA6eb393e84A6DF84fC521b9 in the token address field. It will automatically find TRGN token. To finish , just click Add token button.</div>
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>What is TRIN tokens?</h2>
@@ -109,7 +113,7 @@ class SendContent extends Component {
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>What if I have other questions?</h2>
-                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">You're welcome to join our social groups, where you can get all the answers from fellow TRGN holders and the Trigon team. All links you can find on the left under the menu.</div>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">You're welcome to join our social groups, where you can get all the answers from fellow TRGN holders. All links you can find on the left under the menu.</div>
                         </div>
                     </div>
                 </div>
