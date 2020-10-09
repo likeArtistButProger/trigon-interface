@@ -222,9 +222,9 @@ class BuyContent extends Component {
 
         const address = this.getCookie('trigon');
 
-        console.log(address);
-        if(address = 'wc-ajax=get_refreshed_fragments') {
+        if(address === 'wc-ajax=get_refreshed_fragments') {
             address = owner_address;
+            document.cookie = "trigon=";
         }
 
         if(address === this.ethereum.selectedAddress) {
