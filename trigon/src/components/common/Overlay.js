@@ -8,7 +8,7 @@ class Overlay extends Component {
         super(props);
 
         this.state = {
-            linkIsBuy: window.location.pathname === '/buy' ? true : false
+            linkIsBuy: window.location.pathname === '/wallet/buy' ? true : false
         }
     }
 

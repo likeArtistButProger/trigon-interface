@@ -45,7 +45,7 @@ module.exports.getPrices = async function getPrices(start_price) {
     // For ethereum in USD
     const ethPriceInUSD = await getEtheriumPrice().then(res => res);
 
-    const tokenPriceInUSD = sellPrice * ethPriceInUSD;
+    const tokenPriceInUSD = buyPrice * ethPriceInUSD;
 
     start_price = parseFloat(start_price);
 
@@ -73,6 +73,6 @@ module.exports.getPrices = async function getPrices(start_price) {
         sellPercent: parseInt(sellPercent),
         buyPercent: parseInt(buyPercent),
         priceUSD: parseFloat(tokenPriceInUSD.toFixed(2)),
-        priceETH: parseFloat(sellPrice.toFixed(4))
+        priceETH: parseFloat(buyPrice.toFixed(4))
     };
 }

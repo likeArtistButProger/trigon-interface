@@ -91,7 +91,7 @@ class ChartHandler {
             });
         }
 
-        setInterval(getPrice, 1,8e+6);
+        setInterval(getPrice, 1.8e+6);
 
     }
 

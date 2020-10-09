@@ -1,6 +1,6 @@
 const Web3 = require('web3');
 
-const HTTPProvider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/b2edf0df4af84cbca265c8a384f27db3');
+const HTTPProvider = new Web3.providers.HttpProvider('https://mainnet.infura.io/v3/ad81060272384c98b3f60da6439aa355');
 
 const provider = HTTPProvider;
 
@@ -623,7 +623,7 @@ const abi = [
     }
   ]
 
-let trigon = '0x3C1014DcB7730C73F67eD4719FF9Ca52D4941087';
+let trigon = '0x5CecE14b95578285EA6eb393e84A6DF84fC521b9';
 trigon = w3.utils.toChecksumAddress(trigon);
 
 const contract = new w3.eth.Contract(abi, trigon); 

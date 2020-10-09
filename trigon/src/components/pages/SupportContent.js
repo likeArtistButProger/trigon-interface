@@ -84,6 +84,10 @@ class SendContent extends Component {
                             <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Unlike DEFI or other regular tokens, it was designed to always grow. The more people buy or even sell the token, the faster your token value will increase. Number of XXs you can make, depends on just how long you hodl.</div>
                         </div>
                         <div className="mt-3 mb-6">
+                            <h2>Why the team is anon?</h2>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Because there is no team as such. We are a group of crypto investors who are tired of rug pulls and losing money on crapy projects, where the money are earned only by scammers and whales. Therefore, we decided to hire blockchain devs and create a token that will give everyone an equall and fair opportunity to earn money. So welcome to the crypto community owned project!</div>
+                        </div>
+                        <div className="mt-3 mb-6">
                             <h2>How to buy TRGN token?</h2>
                             <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">Connect to the Trigon wallet through Metamask, click the buy tab in the menu, specify the number of tokens you want to acquire and click the Buy button. After you send ether to the smart contract, you will see TRGN tokens in your Trigon wallet balance.</div>
                         </div>
@@ -93,7 +97,7 @@ class SendContent extends Component {
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>What is TRIN tokens?</h2>
-                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">TRIN token is a Trigon governance token, allowing holders to vote and to share profits from all TRGN token sales, as 5% from all TRGN token sales are automatically distributed between all TRIN token holders. Total supply is 58000 TRIN tokens and 30000 TRIN tokens have been granted for free to the crypto community through the bounty campaign.</div>
+                            <div className="mt-2 px-1 rounded-lg bg-trigon_gray-100">TRIN token is a Trigon governance token, allowing holders to vote and to share profits from TRGN token sales, as 5% from all TRGN token sales are automatically distributed between all TRIN token holders. Total supply is 58,000 TRIN tokens and 30,000 TRIN tokens have been granted for free to the first TRGN token buyers through a fair launch airdrop campaign.</div>
                         </div>
                         <div className="mt-3 mb-6">
                             <h2>Do you have referral program?</h2>
