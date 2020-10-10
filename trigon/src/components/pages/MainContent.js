@@ -180,7 +180,7 @@ class MainContent extends Component {
         let lastBuy = (lastMonthPrice * (1 + admin_commission + ref_commission)) / (1 - growth_commission);
 
         lastSell = parseFloat(this.toFixed(lastSell, 4));
-        lastBuy = parseFloat(lastBuy.toFixed(4));
+        lastBuy = parseFloat(this.toFixed(lastBuy, 4));
 
         let diffSell = sellPrice - lastSell;
         let diffBuy = buyPrice - lastBuy;
