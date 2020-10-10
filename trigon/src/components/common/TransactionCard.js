@@ -15,7 +15,7 @@ class TransactionCard extends Component {
     }
 
     openTransaction = () => {
-        window.open(`https://ropsten.etherscan.io/tx/${this.props.hash}`);
+        window.open(`https://etherscan.io/tx/${this.props.hash}`);
     }
 
     calculateDate = () => {
