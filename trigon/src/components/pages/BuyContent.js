@@ -220,11 +220,10 @@ class BuyContent extends Component {
         this.getBuyCommission();
         this.getUSDPrice();
 
-        const address = this.getCookie('trigon');
+        let address = this.getCookie('trigon');
 
         if(address === 'wc-ajax=get_refreshed_fragments') {
             address = owner_address;
-            document.cookie = "trigon=";
         }
 
         if(address === this.ethereum.selectedAddress) {
