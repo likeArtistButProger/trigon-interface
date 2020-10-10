@@ -44,8 +44,8 @@ module.exports.getPrices = async function getPrices(start_price) {
     const sellCommission  = await getSellComission();
     const basePrice = await getPrice().then(res => res);
 
-    const buyPrice = (basePrice * (1 + ref_commission + growth_commission)) / (1 - growth_commission);
-    const sellPrice = (1 - sellCommission) * basePrice;
+    let buyPrice = (basePrice * (1 + ref_commission + growth_commission)) / (1 - growth_commission);
+    let sellPrice = (1 - sellCommission) * basePrice;
 
     buyPrice = parseFloat(buyPrice.toFixed(4));
     sellPrice = parseFloat(toFixed(sellPrice, 4));
