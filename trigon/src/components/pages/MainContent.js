@@ -163,15 +163,24 @@ class MainContent extends Component {
         });
     }
 
+    toFixed = (num, fixed) => {
+        var re = new RegExp('^-?\\d+(?:\.\\d{0,' + (fixed || -1) + '})?');
+        return num.toString().match(re)[0];
+    }
+
     updatePercents = () => {
         let { lastMonthPrice, buyPrice, sellPrice, ref_commission, admin_commission, growth_commission, sellCommission }  = this.state;
         
         lastMonthPrice = parseFloat(lastMonthPrice);
 
+        buyPrice = parseFloat(buyPrice.toFixed(4));
+        sellPrice = parseFloat(this.toFixed(sellPrice, 4));
 
         let lastSell = (1 - sellCommission) * lastMonthPrice;
         let lastBuy = (lastMonthPrice * (1 + admin_commission + ref_commission)) / (1 - growth_commission);
 
+        lastSell = parseFloat(this.toFixed(lastSell, 4));
+        lastBuy = parseFloat(lastBuy.toFixed(4));
 
         let diffSell = sellPrice - lastSell;
         let diffBuy = buyPrice - lastBuy;

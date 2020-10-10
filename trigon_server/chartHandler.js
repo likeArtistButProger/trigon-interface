@@ -7,7 +7,6 @@ class ChartHandler {
         this.nextPrice = 0;
         this.lastMonthPrice = 0;
         this.sellCommission = 0;
-        this.startPrice = 0;
         this.nextDate = new Date();
         this.lastMonth = new Date();
         this.chartPrices = [];
@@ -26,7 +25,6 @@ class ChartHandler {
                 this.chartPrices = newData.prices;
                 this.dates = newData.dates;
                 this.lastMonthPrice = newData.lastMonthPrice;
-                this.startPrice = newData.startPrice;
             }
         });
     }
@@ -40,7 +38,6 @@ class ChartHandler {
             prices: this.chartPrices,
             dates: this.dates,
             lastMonthPrice: this.lastMonthPrice,
-            startPrice: this.startPrice
         };
 
         fs.truncate('./prices.json', 0, function() {});
@@ -58,11 +55,10 @@ class ChartHandler {
     getInitialPrice() {
         contract.methods.price().call().then(res => {
             this.getSellCommission().then(() => {
-                this.nextPrice = res/10e17;
+                this.nextPrice = (1 - this.sellCommission) * (res/10e17);
                 this.nextDate = new Date();
     
-                this.lastMonthPrice =  0.001;
-                this.startPrice = (1 - this.sellCommission) * 0.001;
+                this.lastMonthPrice = 0.001;
 
                 // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
                 //     this.lastMonthPrice = this.nextPrice;
@@ -79,11 +75,10 @@ class ChartHandler {
         const getPrice = async () => {
             await contract.methods.price().call().then(res => {
                 this.getSellCommission().then(() => {
-                    this.nextPrice = (res/10e17);
+                    this.nextPrice = (1 - this.sellCommission) (res/10e17);
                     this.nextDate = new Date();
         
                     this.lastMonthPrice = 0.001;
-                    this.startPrice = (1 - this.sellCommission) * 0.001;
                     
 
                     // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
@@ -104,11 +99,10 @@ class ChartHandler {
     async getPrice () {
         await contract.methods.price().call().then(res => {
             this.getSellCommission().then(() => {
-                this.nextPrice = (res/10e17);
+                this.nextPrice = (1 - this.sellCommission) * (res/10e17);
                 this.nextDate = new Date();
     
                 this.lastMonthPrice = 0.001;
-                this.startPrice = (1 - this.sellCommission) * 0.001;
     
                 // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {
                 //     this.lastMonthPrice = this.nextPrice;
@@ -127,11 +121,10 @@ class ChartHandler {
 
             contract.methods.price().call().then(res => {
                 this.getSellCommission().then(() => {
-                    this.nextPrice = (res/10e17);
+                    this.nextPrice = (1 - this.sellCommission) * (res/10e17);
                     this.nextDate = new Date();
         
                     this.lastMonthPrice = 0.001;
-                    this.startPrice = (1 - this.sellCommission) * 0.001;
         
 
                     // if(this.nextDate.getTime() - this.lastMonth.getTime() > 6.9063916e15) {

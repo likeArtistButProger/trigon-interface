@@ -26,7 +26,7 @@ app.get('/wallet/api/chart', (req, res) => {
 });
 
 app.get('/wallet/api/getPrices', async (req, res) => {
-    let prices = await priceAPI.getPrices(ChartHandler.ChartHandler.startPrice);
+    let prices = await priceAPI.getPrices(ChartHandler.ChartHandler.lastMonthPrice);
     res.json(prices);
 });
 
