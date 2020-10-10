@@ -75,7 +75,7 @@ class ChartHandler {
         const getPrice = async () => {
             await contract.methods.price().call().then(res => {
                 this.getSellCommission().then(() => {
-                    this.nextPrice = (1 - this.sellCommission) (res/10e17);
+                    this.nextPrice = (1 - this.sellCommission) * (res/10e17);
                     this.nextDate = new Date();
         
                     this.lastMonthPrice = 0.001;
