@@ -191,7 +191,9 @@ class BuyContent extends Component {
 
             minPrice = this.state.calculatedPrice;
 
-            if(this.ethereum.selectedAddress !== owner_address) {
+            let lowerOwnerAddress = owner_address.toLowerCase();
+
+            if(this.ethereum.selectedAddress !== lowerOwnerAddress) {
                 alert("Only owner can send first transaction");
                 return;
             }
