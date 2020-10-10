@@ -43,7 +43,7 @@ class TransactionContent extends Component {
 
     getTransactionsHistory = () => {
         if(this.ethereum) {
-            const url = `https://ropsten.etherscan.io/api?module=account&action=tokentx&address=${this.ethereum.selectedAddress}&startblock=0&endblock=999999999&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`
+            const url = `https://api.etherscan.io/api?module=account&action=tokentx&address=${this.ethereum.selectedAddress}&startblock=0&endblock=999999999&sort=asc&apikey=9AE3Y4JWHMNCRWDT1R9MNDUF5HK6P96MSH`
             axios.get(url)
             .then(res => {
                 const data = res.data.result;
