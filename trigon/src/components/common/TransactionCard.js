@@ -63,7 +63,7 @@ class TransactionCard extends Component {
                           : `${this.props.hash.slice(0, 10)}`}...
                     </a>
                 </div>
-                {
+                {/* {
                     window.innerWidth >= 470 &&
                     <div className="flex text-xs md:text-sm lg:text-xs xl:text-sm flex-row justify-center">
                         <span>
@@ -75,7 +75,7 @@ class TransactionCard extends Component {
                             ago
                         </span>
                     </div>
-                }
+                } */}
                     <div className="flex col-start-3 md:text-sm lg:text-md flex-row justify-center">
                         <span>
                             {this.props.sum} &nbsp; TRGN

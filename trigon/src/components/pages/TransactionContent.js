@@ -121,14 +121,14 @@ class TransactionContent extends Component {
                                 Tx Hash
                             </span>
                         </div>
-                        {
+                        {/* {
                             window.innerWidth >= 470 &&
                             <div className="flex text-trigon_green md:text-xs lg:text-sm xl:text-md flex-row justify-center">
                                 <span>
                                     Date
                                 </span>
                             </div>  
-                        }
+                        } */}
                         <div className="flex col-start-3 text-trigon_green md:text-xs lg:text-sm xl:text-md flex-row justify-center">
                             <span>
                                 Value
