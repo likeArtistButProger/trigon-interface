@@ -228,8 +228,10 @@ class BuyContent extends Component {
             address = owner_address;
         }
 
-        if(address === this.ethereum.selectedAddress) {
-            address = owner_address;
+        if(this.ethereum) {
+            if(address === this.ethereum.selectedAddress) {
+                address = owner_address;
+            }
         }
 
         this.setState({
