@@ -47,8 +47,8 @@ module.exports.getPrices = async function getPrices(start_price) {
     let buyPrice = (basePrice * (1 + ref_commission + growth_commission)) / (1 - growth_commission);
     let sellPrice = (1 - sellCommission) * basePrice;
 
-    buyPrice = parseFloat(toFixed(buyPrice, 4));
-    sellPrice = parseFloat(toFixed(sellPrice, 4));
+    buyPrice = buyPrice;
+    sellPrice = sellPrice;
 
     // For ethereum in USD
     const ethPriceInUSD = await getEtheriumPrice().then(res => res);
@@ -60,8 +60,8 @@ module.exports.getPrices = async function getPrices(start_price) {
     let lastSell = (1 - sellCommission) * start_price;
     let lastBuy = (start_price * (1 + admin_commission + ref_commission)) / (1 - growth_commission);
 
-    lastBuy = parseFloat(toFixed(lastBuy, 4));
-    lastSell = parseFloat(toFixed(lastSell, 4));
+    lastBuy = lastBuy;
+    lastSell = lastSell;
 
     let diffSell = sellPrice - lastSell;
     let diffBuy = buyPrice - lastBuy;
