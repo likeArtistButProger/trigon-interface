@@ -34,9 +34,22 @@ class ChartHandler {
 
         this.chartPrices = [...this.chartPrices, newPrice ];
         this.dates = [...this.dates, formatedDate]
+
+        let clearChartPrices = [];
+        let clearChartDates = [];
+
+        for (let i = 1; i < this.chartPrices.length; i++) {
+            if (this.chartPrices[i] === this.chartPrices[i - 1]) {
+                continue;
+            } else {
+                clearChartPrices.push(this.chartPrices[i]);
+                clearChartDates.push(this.dates[i]);
+            }
+        }
+
         let writeData = {
-            prices: this.chartPrices,
-            dates: this.dates,
+            prices: clearChartPrices,
+            dates: clearChartDates,
             lastMonthPrice: this.lastMonthPrice,
         };
 

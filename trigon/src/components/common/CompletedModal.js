@@ -89,7 +89,7 @@ class CompletedModal extends Component {
     
     toEtherscan = () => {
         if(this.props.transaction) {
-            window.open(`https://ropsten.etherscan.io/tx/${this.props.transaction}`);
+            window.open(`https://etherscan.io/tx/${this.props.transaction}`);
             return;
         }
         this.props.closeModal();
