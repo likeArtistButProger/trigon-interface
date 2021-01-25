@@ -46,7 +46,7 @@ class SellContent extends Component {
                 let address = this.ethereum.selectedAddress;
                 let eth_balance;
                 const balance = await this.w3.eth.getBalance(address, (error, balance) => {
-                    eth_balance = this.w3.fromWei(balance, "ether") + "";
+                    eth_balance = this.w3.utils.fromWei(balance, "ether") + "";
                     eth_balance = parseFloat(eth_balance).toFixed(4);
                     this.setState({
                         account_eth_balance: eth_balance
