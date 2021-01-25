@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import Navigation from '../common/Navigation';
-import MobileNavigation from '../common/MobileNavigation';
-import BuyContent from './BuyContent';
+import Navigation from '../common/Navigation.js';
+import MobileNavigation from '../common/MobileNavigation.js';
+import BuyContent from './BuyContent.js';
 
 class BuyComponent extends Component {
 

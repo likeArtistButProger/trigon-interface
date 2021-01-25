@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 
-import TopBar from './TopBar';
+import TopBar from './TopBar.js';
 
 const MenuBtn = styled.div`
     cursor: pointer;

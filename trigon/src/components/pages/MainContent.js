@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import TopBar from '../common/TopBar';
+import TopBar from '../common/TopBar.js';
 import axios from 'axios';
 
 import '../../styles/maincontent.css';
@@ -7,7 +7,7 @@ import '../../styles/maincontent.css';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
-import { contract, methods } from '../../trigon_interface/interface';
+import { contract, methods } from '../../trigon_interface/interface.js';
 
 import '../../styles/chart.css';
 

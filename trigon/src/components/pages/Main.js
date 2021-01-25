@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-import MobileNavigation from '../common/MobileNavigation';
-import Navigation from '../common/Navigation';
-import MainContent from './MainContent';
+import MobileNavigation from '../common/MobileNavigation.js';
+import Navigation from '../common/Navigation.js';
+import MainContent from './MainContent.js';
 
 class Main extends Component {
 

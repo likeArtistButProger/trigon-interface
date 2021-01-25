@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import TopBar from '../common/TopBar';
-import CompletedModal from '../common/CompletedModal';
-import Overlay from '../common/Overlay';
+import TopBar from '../common/TopBar.js';
+import CompletedModal from '../common/CompletedModal.js';
+import Overlay from '../common/Overlay.js';
 
 import '../../styles/buycontent.css';
-import { contract, methods, owner_address } from '../../trigon_interface/interface';
+import { contract, methods, owner_address } from '../../trigon_interface/interface.js';
 import axios from 'axios';
 
 class BuyContent extends Component {
