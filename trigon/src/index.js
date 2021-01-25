@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './styles/index.css';
 import App from './App.js';
 import * as serviceWorker from './serviceWorker';
+import "regenerator-runtime/runtime.js";
 
 ReactDOM.render(
   <React.StrictMode>
